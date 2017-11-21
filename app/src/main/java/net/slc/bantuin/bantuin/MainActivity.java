@@ -37,7 +37,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnCompleteListener{
 
     private Button loginGoogle;
-    private LoginButton loginFacebook;
+    private Button loginFacebook;
     private GoogleSignInClient googleSignInClient;
     private FirebaseAuth mAuth;
     private GoogleSignInOptions gso;
@@ -69,12 +69,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        loginFacebook = (LoginButton) findViewById(R.id.loginFacebook);
+        loginFacebook = (Button) findViewById(R.id.loginFacebook);
         loginFacebook.setOnClickListener(this);
-        loginFacebook.setReadPermissions("email", "public_profile");
         mCallbackManager = CallbackManager.Factory.create();
 
-        loginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
@@ -166,19 +165,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleFacebookAccessToken(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            currentUser = mAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, currentUser.getEmail(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                        }
-                        Toast.makeText(MainActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+                .addOnCompleteListener(this, this);
     }
 }
