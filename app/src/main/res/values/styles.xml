@@ -1,15 +1,10 @@
 <resources>
 
-    <!-- Base application theme. -->
-
     <style name="BantuinTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryColor</item>
     </style>
-
 
     <style name="WrapText" parent="BantuinTheme">
         <item name="android:layout_marginLeft">20dp</item>

@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <android.support.design.widget.TextInputLayout
+        style="@style/WrapText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/WrapText"
-        android:layout_marginTop="12dp" >
+        android:layout_marginTop="12dp">
 
         <EditText
             style="@style/EditText"
@@ -16,22 +17,21 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        style="@style/WrapText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/WrapText"
-        android:layout_marginTop="12dp" >
+        android:layout_marginTop="12dp">
 
         <EditText
             style="@style/EditText"
             android:hint="Password"
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
+
     <Button
         style="@style/Button"
-        android:background="@color/primaryColor"
-        android:text="REGISTER"
-        android:layout_marginTop="18dp"
         android:layout_gravity="center"
-
-        />
+        android:layout_marginTop="18dp"
+        android:background="@color/primaryColor"
+        android:text="REGISTER" />
 </LinearLayout>
