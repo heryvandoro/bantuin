@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
-
+//panda
 public class UIActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btnLogout;
