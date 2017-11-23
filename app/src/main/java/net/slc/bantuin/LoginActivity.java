@@ -181,8 +181,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     });
         }
-
-       // moveToHome();
+        moveToHome();
     }
 
     private void handleFacebookAccessToken(AccessToken token) {

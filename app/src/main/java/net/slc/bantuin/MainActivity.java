@@ -24,10 +24,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initializeComponent(){
-        btnLogout = (Button) findViewById(R.id.btnLogout);
+        btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(this);
 
-        btnProfile = (Button) findViewById(R.id.btnProfile);
+        btnProfile = findViewById(R.id.btnProfile);
         btnProfile.setOnClickListener(this);
     }
 
@@ -52,6 +52,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void profile(){
-        Toast.makeText(this, ActiveUser.getUser().getDisplayName().toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, ActiveUser.getUser().getUid().toString(), Toast.LENGTH_SHORT).show();
     }
 }
