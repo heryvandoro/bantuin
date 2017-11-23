@@ -9,10 +9,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-/**
- * Created by Hery Vandoro on 11/24/2017.
- */
-
 public abstract class MasterActivity extends AppCompatActivity{
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -29,6 +25,12 @@ public abstract class MasterActivity extends AppCompatActivity{
             }
         }
         return super.dispatchTouchEvent( event );
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     public abstract void initializeComponent();
