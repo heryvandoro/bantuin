@@ -17,16 +17,15 @@
 
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">
-        </activity>
-        <activity android:name=".UILoginActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".DataActivity">
             <intent-filter>
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".UILoginActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".DataActivity"/>
     </application>
 
 </manifest>
