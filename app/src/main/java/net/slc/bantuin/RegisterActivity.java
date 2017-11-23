@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import net.slc.bantuin.Model.ActiveUser;
 
@@ -72,8 +73,21 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
     @Override
     public void onComplete(@NonNull Task task) {
         if (task.isSuccessful()) {
-            ActiveUser.setUser(FirebaseAuth.getInstance().getCurrentUser());
-            moveToHome();
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(textFullname.getText().toString())
+                    .build();
+
+            FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                ActiveUser.setUser(FirebaseAuth.getInstance().getCurrentUser());
+                                moveToHome();
+                            }
+                        }
+                    });
+
         } else {
             Toast.makeText(RegisterActivity.this, task.getException().getMessage().toString(),
                     Toast.LENGTH_SHORT).show();
