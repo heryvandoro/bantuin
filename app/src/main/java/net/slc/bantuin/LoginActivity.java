@@ -31,6 +31,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import net.slc.bantuin.Model.ActiveUser;
+
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, OnCompleteListener, FacebookCallback<LoginResult>{
@@ -38,7 +40,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button loginGoogle, btnRegister;
     private LoginButton loginFacebook;
     private GoogleSignInClient googleSignInClient;
-    private FirebaseAuth mAuth;
     private GoogleSignInOptions gso;
     private CallbackManager mCallbackManager;
     private static int GOOGLE_SIGN_IN_REQUEST_CODE;
@@ -51,9 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-        //mAuth.signOut();
-        if(mAuth.getCurrentUser()!=null){
+        if(ActiveUser.isLogged()){
             moveToHome();
         }
 
@@ -99,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginFacebook.registerCallback(mCallbackManager, this);
     }
 
-    public void checkAvailbility(){
+    private void checkAvailbility(){
         switch (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)){
             case ConnectionResult.SERVICE_MISSING:
                 GoogleApiAvailability.getInstance().getErrorDialog(this, ConnectionResult.SERVICE_MISSING,0).show();
@@ -128,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void signIn(int code){
+    private void signIn(int code){
         if(code==GOOGLE_SIGN_IN_REQUEST_CODE){
             Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
@@ -147,7 +146,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-                mAuth.signInWithCredential(credential)
+                ActiveUser.getSession().signInWithCredential(credential)
                         .addOnCompleteListener(this, this);
             } catch (ApiException e) {
                 Toast.makeText(this, "Authentication Failed", Toast.LENGTH_LONG).show();
@@ -158,17 +157,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onComplete(@NonNull Task task) {
         if (task.isSuccessful()) {
-            currentUser = mAuth.getCurrentUser();
+            ActiveUser.setUser(FirebaseAuth.getInstance());
             moveToHome();
         } else {
-            Toast.makeText(this, "Authentication faileds.",
+            Toast.makeText(this, "Authentication failed.",
                     Toast.LENGTH_LONG).show();
         }
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
+        ActiveUser.getSession().signInWithCredential(credential)
                 .addOnCompleteListener(this, this);
     }
 
