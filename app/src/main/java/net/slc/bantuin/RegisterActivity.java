@@ -21,7 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import net.slc.bantuin.Model.ActiveUser;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, OnCompleteListener{
+public class RegisterActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener{
 
     Button btnRegister;
     EditText textFullname, textEmail, textPassword, textRepassword;
@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         initializeComponent();
     }
 
-    private void initializeComponent(){
+    public void initializeComponent(){
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(this);
 
@@ -92,22 +92,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 doRegister();
                 break;
         }
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if ( v instanceof TextInputLayout || v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
-                    v.clearFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
-        return super.dispatchTouchEvent( event );
     }
 }

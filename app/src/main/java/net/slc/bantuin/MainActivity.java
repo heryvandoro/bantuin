@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import net.slc.bantuin.Model.ActiveUser;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends MasterActivity implements View.OnClickListener{
 
     Button btnLogout, btnProfile;
 
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initializeComponent();
     }
 
-    private void initializeComponent(){
+    public void initializeComponent(){
         btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(this);
 

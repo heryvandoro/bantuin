@@ -13,7 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class DataActivity extends AppCompatActivity {
+public class DataActivity extends MasterActivity {
 
     private DatabaseReference mDatabase;
     private ArrayList<String> bookList = new ArrayList<>();
@@ -28,7 +28,7 @@ public class DataActivity extends AppCompatActivity {
         initializeComponent();
     }
 
-    private void initializeComponent(){
+    public  void initializeComponent(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mDatabase = mDatabase.child("books");

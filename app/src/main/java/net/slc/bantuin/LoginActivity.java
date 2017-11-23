@@ -33,7 +33,7 @@ import net.slc.bantuin.Model.ActiveUser;
 
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, OnCompleteListener, FacebookCallback<LoginResult>{
+public class LoginActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener, FacebookCallback<LoginResult>{
 
     private Button loginGoogle, btnRegister, loginFacebook;
 
@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             moveToHome();
         }
 
-        initializeComponents();
+        initializeComponent();
         checkAvailbility();
     }
 
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void initializeComponents(){
+    public void initializeComponent(){
         //for intent data status code
         GOOGLE_SIGN_IN_REQUEST_CODE = 1;
 

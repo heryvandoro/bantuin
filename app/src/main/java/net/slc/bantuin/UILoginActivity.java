@@ -13,7 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 //import java.util.Arrays;
 //import java.util.List;
 
-public class UILoginActivity extends AppCompatActivity {
+public class UILoginActivity extends MasterActivity {
+    @Override
+    public void initializeComponent() {
+
+    }
 
 //    FirebaseUser activeUser;
 //
