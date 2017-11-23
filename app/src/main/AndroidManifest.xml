@@ -16,7 +16,7 @@
             android:value="@string/facebook_application_id" />
 
         <activity android:name=".RegisterActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
