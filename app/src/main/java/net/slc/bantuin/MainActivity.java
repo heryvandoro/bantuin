@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import net.slc.bantuin.Model.ActiveUser;
 
-public class MainActivity extends MasterActivity implements View.OnClickListener{
+public class MainActivity extends MasterActivity implements View.OnClickListener {
 
     Button btnLogout, btnProfile;
 
@@ -20,7 +20,7 @@ public class MainActivity extends MasterActivity implements View.OnClickListener
         initializeComponent();
     }
 
-    public void initializeComponent(){
+    public void initializeComponent() {
         btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(this);
 
@@ -30,25 +30,27 @@ public class MainActivity extends MasterActivity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.btnLogout :
+        switch (view.getId()) {
+            case R.id.btnLogout:
                 logout();
                 break;
-            case R.id.btnProfile :
+            case R.id.btnProfile:
                 profile();
                 break;
         }
     }
 
-    private void logout(){
+    private void logout() {
         ActiveUser.logout();
-        if(!ActiveUser.isLogged()){
+        if (!ActiveUser.isLogged()) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
     }
 
-    public void profile(){
-        Toast.makeText(this, ActiveUser.getUser().getUid().toString(), Toast.LENGTH_SHORT).show();
+    public void profile() {
+        String email = ActiveUser.getUser().getEmail().toString();
+        String name = ActiveUser.getUser().getDisplayName().toString();
+        Toast.makeText(this, name + ", " + email, Toast.LENGTH_SHORT).show();
     }
 }

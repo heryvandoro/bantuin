@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -35,11 +36,10 @@ import java.util.Arrays;
 
 public class LoginActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener, FacebookCallback<LoginResult>{
 
-    private Button loginGoogle, btnRegister, loginFacebook;
-
+    private Button loginGoogle, btnRegister, loginFacebook, btnLogin;
+    private EditText txtEmail, txtPassword;
     private GoogleSignInOptions gso;
     private CallbackManager mCallbackManager;
-    private static int GOOGLE_SIGN_IN_REQUEST_CODE;
     public GoogleSignInClient googleSignInClient;
     private AuthCredential credential;
 
@@ -74,9 +74,6 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     }
 
     public void initializeComponent(){
-        //for intent data status code
-        GOOGLE_SIGN_IN_REQUEST_CODE = 1;
-
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(this);
 
@@ -94,6 +91,12 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
         mCallbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(mCallbackManager, this);
+
+        btnLogin = findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(this);
+
+        txtEmail = findViewById(R.id.textEmail);
+        txtPassword = findViewById(R.id.textPassword);
     }
 
     private void checkAvailbility(){
@@ -114,7 +117,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.loginGoogle :
-                signIn(GOOGLE_SIGN_IN_REQUEST_CODE);
+                signIn(1);
                 break;
             case R.id.loginFacebook :
                 signIn(2);
@@ -122,15 +125,23 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
             case R.id.btnRegister :
                 movetoRegister();
                 break;
+            case R.id.btnLogin :
+                signIn(3);
+                break;
         }
     }
 
     private void signIn(int code){
-        if(code==GOOGLE_SIGN_IN_REQUEST_CODE){
+        if(code==1){
             Intent signInIntent = googleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST_CODE);
-        }else{
+            startActivityForResult(signInIntent, 1);
+        }else if(code==2){
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+        }else if(code==3){
+            String email = txtEmail.getText().toString();
+            String password = txtPassword.getText().toString();
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this,this);
         }
     }
 
@@ -138,7 +149,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == GOOGLE_SIGN_IN_REQUEST_CODE){
+        if(requestCode == 1){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
