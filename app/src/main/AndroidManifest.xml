@@ -11,17 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/BantuinTheme">
-        <!--<activity android:name=".MainActivity"></activity>-->
-        <activity android:name=".RegisterActivity">
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".UIActivity"></activity>
+        <activity android:name=".UILoginActivity" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
