@@ -13,7 +13,7 @@ import net.slc.bantuin.Model.ActiveUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    Button btnLogout;
+    Button btnLogout, btnProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initializeComponent(){
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(this);
+
+        btnProfile = (Button) findViewById(R.id.btnProfile);
+        btnProfile.setOnClickListener(this);
     }
 
     @Override
@@ -34,15 +37,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLogout :
                 logout();
                 break;
+            case R.id.btnProfile :
+                profile();
+                break;
         }
     }
 
     private void logout(){
         ActiveUser.logout();
         if(!ActiveUser.isLogged()){
-            Toast.makeText(this, "a", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
+    }
+
+    public void profile(){
+        Toast.makeText(this, ActiveUser.getUser().getDisplayName().toString(), Toast.LENGTH_SHORT).show();
     }
 }

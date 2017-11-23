@@ -21,7 +21,7 @@
         android:layout_marginTop="18dp"
         android:text="Login with Google" />
 
-    <com.facebook.login.widget.LoginButton
+    <Button
         android:id="@+id/loginFacebook"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
