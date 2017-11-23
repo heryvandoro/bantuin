@@ -7,9 +7,6 @@
         style="@style/PaddingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:focusableInTouchMode="true"
-        android:clickable="true"
-        android:focusable="true"
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
