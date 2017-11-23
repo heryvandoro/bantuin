@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static int GOOGLE_SIGN_IN_REQUEST_CODE;
     public GoogleSignInClient googleSignInClient;
     private AuthCredential credential;
-    LoginResult logRes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +49,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        FirebaseAuth.getInstance().signOut();
 
         if(ActiveUser.isLogged()){
             moveToHome();
@@ -63,7 +60,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onSuccess(LoginResult loginResult) {
-        this.logRes = loginResult;
         handleFacebookAccessToken(loginResult.getAccessToken());
     }
 
@@ -86,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         loginGoogle = findViewById(R.id.loginGoogle);
         loginGoogle.setOnClickListener(this);
+
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
