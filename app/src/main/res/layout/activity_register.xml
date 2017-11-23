@@ -1,65 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <android.support.design.widget.TextInputLayout
-        style="@style/WrapText"
+    <LinearLayout
+        style="@style/PaddingLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/textFullname"
-            style="@style/EditText"
-            android:hint="Fullname" />
-    </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
 
-    <android.support.design.widget.TextInputLayout
-        style="@style/WrapText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
+            <EditText
+                android:id="@+id/textFullname"
+                style="@style/EditText"
+                android:hint="Fullname" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/textEmail"
-            style="@style/EditText"
-            android:hint="Email" />
-    </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
 
-    <android.support.design.widget.TextInputLayout
-        style="@style/WrapText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
+            <EditText
+                android:id="@+id/textEmail"
+                style="@style/EditText"
+                android:hint="Email" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/textPassword"
-            style="@style/EditText"
-            android:hint="Password"
-            android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
 
-    <android.support.design.widget.TextInputLayout
-        style="@style/WrapText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
+            <EditText
+                android:id="@+id/textPassword"
+                style="@style/EditText"
+                android:hint="Password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/textRePassword"
-            style="@style/EditText"
-            android:hint="Re-Password"
-            android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
 
-    <Button
-        android:id="@+id/btnRegister"
-        style="@style/Button"
-        android:layout_gravity="center"
-        android:layout_marginTop="18dp"
-        android:background="@color/primaryColor"
-        android:text="REGISTER" />
-</LinearLayout>
+            <EditText
+                android:id="@+id/textRePassword"
+                style="@style/EditText"
+                android:hint="Re-Password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnRegister"
+            style="@style/Button"
+            android:layout_gravity="center"
+            android:layout_marginTop="18dp"
+            android:background="@color/primaryColor"
+            android:text="REGISTER" />
+
+    </LinearLayout>
+</ScrollView>
