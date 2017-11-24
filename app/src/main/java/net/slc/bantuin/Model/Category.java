@@ -13,7 +13,7 @@ public class Category {
 
     }
 
-    public Category(String name, String description, String nameicon){
+    public Category(String name, String description, String icon){
         this.description = description;
         this.icon = icon;
         this.name = name;

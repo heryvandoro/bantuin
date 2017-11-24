@@ -195,7 +195,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     }
 
     private void moveToHome(){
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
 

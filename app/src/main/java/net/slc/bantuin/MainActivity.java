@@ -40,43 +40,12 @@ public class MainActivity extends MasterActivity implements View.OnClickListener
 
         btnProfile = findViewById(R.id.btnProfile);
         btnProfile.setOnClickListener(this);
-
-        categoryDatabase = FirebaseDatabase.getInstance().getReference();
-        categoryDatabase = categoryDatabase.child("categories");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        categoryDatabase.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Category category = dataSnapshot.getValue(Category.class);
-                categories.add(category);
-                Toast.makeText(MainActivity.this, category.getName(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
     }
 

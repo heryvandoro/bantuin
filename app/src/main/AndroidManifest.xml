@@ -15,18 +15,22 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_application_id" />
 
-        <activity android:name=".RegisterActivity"
-            android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
+
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".UILoginActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".DataActivity"/>
+        <activity android:name=".DataActivity" />
+        <activity android:name=".HomeActivity"></activity>
     </application>
 
 </manifest>
