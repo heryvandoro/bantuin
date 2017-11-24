@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "613570470402-96hv0cu4dq1tauai425pipntc06gcaur.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bantuin.android",
+            "certificate_hash": "7e70d2b5e3de95ea3e066d08fe22920295f1f41d"
+          }
+        },
+        {
           "client_id": "613570470402-2c2bacpkm226p4uh8i80tda3nemttlk6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

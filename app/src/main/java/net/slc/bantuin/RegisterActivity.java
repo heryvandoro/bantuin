@@ -12,13 +12,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import net.slc.bantuin.Model.ActiveUser;
+import net.slc.bantuin.Model.User;
 
 public class RegisterActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener{
 
     Button btnRegister;
     EditText textFullname, textEmail, textPassword, textRepassword;
+    DatabaseReference userDatabase;
+
 
     private boolean isValid = true;
 
@@ -40,6 +45,10 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
         textEmail = findViewById(R.id.textEmail);
         textPassword = findViewById(R.id.textPassword);
         textRepassword = findViewById(R.id.textRePassword);
+
+        userDatabase = FirebaseDatabase.getInstance().getReference();
+        userDatabase = userDatabase.child("users");
+
     }
 
     private void moveToHome(){
@@ -83,6 +92,9 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 ActiveUser.setUser(FirebaseAuth.getInstance().getCurrentUser());
+                                String id = userDatabase.push().getKey();
+                                User user = new User(ActiveUser.getUser().getDisplayName(),ActiveUser.getUser().getEmail(),"https://www.business-software.com/wp-content/uploads/2013/02/avatar_placeholder.png");
+                                userDatabase.child(id).setValue(user);
                                 moveToHome();
                             }
                         }
