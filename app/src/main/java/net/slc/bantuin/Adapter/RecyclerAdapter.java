@@ -8,14 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import net.slc.bantuin.Model.Category;
 import net.slc.bantuin.R;
 
 import java.util.ArrayList;
-
-/**
- * Created by PC on 24-Nov-17.
- */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
     private Context context;
@@ -26,15 +24,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView card_name;
+        private TextView categoryName;
+        private ImageView categoryPicture;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            card_name = itemView.findViewById(R.id.card_name);
+            categoryName = itemView.findViewById(R.id.categoryName);
+            categoryPicture = itemView.findViewById(R.id.categoryPicture);
             //set onclick
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //            });
-
         }
     }
 
@@ -47,7 +46,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.card_name.setText(categories.get(position).getName());
+        holder.categoryName.setText(categories.get(position).getName());
+        Picasso.with(context)
+                .load(categories.get(position).getIcon())
+                .resize(100, 100)
+                .into(holder.categoryPicture);
     }
 
     @Override
