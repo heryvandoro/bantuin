@@ -29,4 +29,26 @@
         <item name="android:focusableInTouchMode">true</item>
     </style>
 
+    <!--LOGIN THEME SECTION-->
+    <style name="BantuinThemeLogin" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/primaryTextColor</item>
+        <item name="colorPrimaryDark">@color/primaryTextColor</item>
+        <item name="colorAccent">@color/primaryTextColor</item>
+    </style>
+
+    <style name="EditTextLogin" parent="BantuinThemeLogin">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="android:colorControlNormal">@color/primaryTextColor</item>
+        <item name="android:colorControlActivated">@color/primaryTextColor</item>
+    </style>
+
+    <style name="ButtonLogin" parent="android:Widget.Button">
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <!--LOGIN THEME SECTION-->
 </resources>

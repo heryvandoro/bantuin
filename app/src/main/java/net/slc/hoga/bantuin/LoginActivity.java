@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -42,8 +43,9 @@ import java.util.Arrays;
 
 public class LoginActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener, FacebookCallback<LoginResult>{
 
-    private Button loginGoogle, btnRegister, loginFacebook, btnLogin;
+    private Button loginGoogle, loginFacebook, btnLogin;
     private EditText txtEmail, txtPassword;
+    private TextView btnRegister;
     private GoogleSignInOptions gso;
     private CallbackManager mCallbackManager;
     public GoogleSignInClient googleSignInClient;
@@ -80,6 +82,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     }
 
     public void initializeComponent(){
+        getSupportActionBar().hide();
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(this);
 
