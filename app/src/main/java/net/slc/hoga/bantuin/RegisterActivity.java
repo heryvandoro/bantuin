@@ -15,15 +15,15 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import net.slc.hoga.bantuin.Helper.Config;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.User;
 
 public class RegisterActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener{
 
-    Button btnRegister;
-    EditText textFullname, textEmail, textPassword, textRepassword;
-    DatabaseReference userDatabase;
-
+    private Button btnRegister;
+    private EditText textFullname, textEmail, textPassword, textRepassword;
+    private DatabaseReference userDatabase;
 
     private boolean isValid = true;
 
@@ -48,7 +48,6 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
 
         userDatabase = FirebaseDatabase.getInstance().getReference();
         userDatabase = userDatabase.child("users");
-
     }
 
     private void moveToHome(){
@@ -92,9 +91,9 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 ActiveUser.setUser(FirebaseAuth.getInstance().getCurrentUser());
-                                String id = userDatabase.push().getKey();
-                                User user = new User(ActiveUser.getUser().getDisplayName(),ActiveUser.getUser().getEmail(),"https://www.business-software.com/wp-content/uploads/2013/02/avatar_placeholder.png");
-                                userDatabase.child(id).setValue(user);
+                                String uid = ActiveUser.getUser().getUid();
+                                User user = new User(ActiveUser.getUser().getDisplayName(),ActiveUser.getUser().getEmail(), Config.TEMP_PHOTO);
+                                userDatabase.child(uid).setValue(user);
                                 moveToHome();
                             }
                         }

@@ -2,35 +2,26 @@ package net.slc.hoga.bantuin;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
+import com.facebook.*;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.common.*;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.*;
+import com.google.firebase.database.*;
 
-import net.slc.hoga.bantuin.Model.ActiveUser;
+import net.slc.hoga.bantuin.Helper.Config;
+import net.slc.hoga.bantuin.Model.*;
 
 import java.util.Arrays;
 
@@ -42,6 +33,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     private CallbackManager mCallbackManager;
     public GoogleSignInClient googleSignInClient;
     private AuthCredential credential;
+    private DatabaseReference userDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +41,11 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        initializeComponent();
         if(ActiveUser.isLogged()){
+            addAccountToDB();
             moveToHome();
         }
-
-        initializeComponent();
         checkAvailbility();
     }
 
@@ -97,6 +88,9 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
 
         txtEmail = findViewById(R.id.textEmail);
         txtPassword = findViewById(R.id.textPassword);
+
+        userDatabase = FirebaseDatabase.getInstance().getReference();
+        userDatabase = userDatabase.child("users");
     }
 
     private void checkAvailbility(){
@@ -169,19 +163,8 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
 
         if(task.isSuccessful()){
             ActiveUser.setUser(FirebaseAuth.getInstance().getCurrentUser());
+            addAccountToDB();
             moveToHome();
-//            ActiveUser.getUser().linkWithCredential(credential)
-//                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if (task.isSuccessful()) {
-//                                ActiveUser.setUser(task.getResult().getUser());
-//                            } else {
-//                                Toast.makeText(LoginActivity.this, "Authentication failed.",
-//                                        Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
         }else{
             Toast.makeText(this, task.getException().getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
@@ -201,5 +184,22 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
 
     private void movetoRegister(){
         startActivity(new Intent(this, RegisterActivity.class));
+    }
+
+    private void addAccountToDB(){
+        userDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String uid = ActiveUser.getUser().getUid();
+                if(dataSnapshot.hasChild(uid)) return;
+                User user = new User(ActiveUser.getUser().getDisplayName(),ActiveUser.getUser().getEmail(), Config.TEMP_PHOTO);
+                userDatabase.child(uid).setValue(user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
