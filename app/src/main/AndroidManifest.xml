@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.slc.bantuin">
+    package="net.slc.hoga.bantuin">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -40,7 +40,10 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".LoginActivity">
             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -48,7 +51,7 @@
         <activity android:name=".UILoginActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".DataActivity" />
-        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".HomeActivity"/>
     </application>
 
 </manifest>

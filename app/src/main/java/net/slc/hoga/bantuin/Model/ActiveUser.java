@@ -1,4 +1,4 @@
-package net.slc.bantuin.Model;
+package net.slc.hoga.bantuin.Model;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

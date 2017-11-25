@@ -1,4 +1,4 @@
-package net.slc.bantuin;
+package net.slc.hoga.bantuin;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,8 +10,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import net.slc.bantuin.Adapter.RecyclerAdapter;
-import net.slc.bantuin.Model.Category;
+import net.slc.hoga.bantuin.Adapter.RecyclerAdapter;
+import net.slc.hoga.bantuin.Model.Category;
 
 import java.util.ArrayList;
 

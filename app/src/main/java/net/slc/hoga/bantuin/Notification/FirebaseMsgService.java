@@ -1,4 +1,4 @@
-package net.slc.bantuin.Notification;
+package net.slc.hoga.bantuin.Notification;
 
 import android.util.Log;
 

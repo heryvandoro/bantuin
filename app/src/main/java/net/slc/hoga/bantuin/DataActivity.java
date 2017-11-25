@@ -1,4 +1,4 @@
-package net.slc.bantuin;
+package net.slc.hoga.bantuin;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;

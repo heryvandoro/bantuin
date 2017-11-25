@@ -1,8 +1,4 @@
-package net.slc.bantuin.Model;
-
-/**
- * Created by PC on 24-Nov-17.
- */
+package net.slc.hoga.bantuin.Model;
 
 public class Category {
     String description;

@@ -1,21 +1,15 @@
-package net.slc.bantuin;
+package net.slc.hoga.bantuin;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import net.slc.bantuin.Model.ActiveUser;
-import net.slc.bantuin.Model.Category;
-import net.slc.bantuin.Model.User;
+import net.slc.hoga.bantuin.Model.ActiveUser;
+import net.slc.hoga.bantuin.Model.Category;
 
 import java.util.ArrayList;
 

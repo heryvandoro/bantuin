@@ -1,4 +1,4 @@
-package net.slc.bantuin;
+package net.slc.hoga.bantuin;
 
 import android.content.Context;
 import android.graphics.Rect;

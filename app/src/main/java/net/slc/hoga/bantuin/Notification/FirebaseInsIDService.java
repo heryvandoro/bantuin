@@ -1,6 +1,5 @@
-package net.slc.bantuin.Notification;
+package net.slc.hoga.bantuin.Notification;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;

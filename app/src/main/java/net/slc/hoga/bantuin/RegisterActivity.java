@@ -1,4 +1,4 @@
-package net.slc.bantuin;
+package net.slc.hoga.bantuin;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import net.slc.bantuin.Model.ActiveUser;
-import net.slc.bantuin.Model.User;
+import net.slc.hoga.bantuin.Model.ActiveUser;
+import net.slc.hoga.bantuin.Model.User;
 
 public class RegisterActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener{
 

@@ -1,4 +1,4 @@
-package net.slc.bantuin;
+package net.slc.hoga.bantuin;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -30,7 +30,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import net.slc.bantuin.Model.ActiveUser;
+import net.slc.hoga.bantuin.Model.ActiveUser;
 
 import java.util.Arrays;
 

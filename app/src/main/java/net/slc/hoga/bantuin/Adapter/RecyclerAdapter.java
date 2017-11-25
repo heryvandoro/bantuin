@@ -1,4 +1,4 @@
-package net.slc.bantuin.Adapter;
+package net.slc.hoga.bantuin.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import net.slc.bantuin.Model.Category;
-import net.slc.bantuin.R;
+import net.slc.hoga.bantuin.Model.Category;
+import net.slc.hoga.bantuin.R;
 
 import java.util.ArrayList;
 
