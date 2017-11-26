@@ -38,6 +38,7 @@
         <activity
             android:name=".RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,7 +52,7 @@
         <activity android:name=".UILoginActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".DataActivity" />
-        <activity android:name=".HomeActivity"/>
+        <activity android:name=".HomeActivity" />
     </application>
 
 </manifest>
