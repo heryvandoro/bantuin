@@ -3,7 +3,10 @@ package net.slc.hoga.bantuin;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,9 +18,11 @@ import net.slc.hoga.bantuin.Fragment.DiscoverFragment;
 import net.slc.hoga.bantuin.Fragment.EventFragment;
 import net.slc.hoga.bantuin.Fragment.HomeFragment;
 
-public class HomeActivity extends MasterActivity {
+public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelectedListener{
     TabLayout tabLayout;
     ViewPager viewPager;
+    DrawerLayout drawerLayout;
+    ActionBarDrawerToggle menuToggle;
 
     private int[] tabIcons = {
             R.drawable.icon_home,
@@ -51,23 +56,21 @@ public class HomeActivity extends MasterActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                setTabActive(tab, true);
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                setTabActive(tab, false);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                setTabActive(tab, true);
-            }
-        });
+        tabLayout.addOnTabSelectedListener(this);
         tabLayout.getTabAt(0).select();
+
+        drawerLayout = findViewById(R.id.drawer);
+        menuToggle= new ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(menuToggle);
+        menuToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(menuToggle.onOptionsItemSelected(item))
+            return true;
+        return super.onOptionsItemSelected(item);
     }
 
     private void setupTabIcons() {
@@ -101,5 +104,20 @@ public class HomeActivity extends MasterActivity {
             textTab.setTextColor(getResources().getColor(R.color.secondaryTextColor));
             iconTab.setBackgroundResource(tabIcons[tab.getPosition()]);
         }
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        setTabActive(tab, true);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        setTabActive(tab, false);
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        setTabActive(tab, true);
     }
 }
