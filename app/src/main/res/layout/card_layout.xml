@@ -17,15 +17,18 @@
             android:id="@+id/categoryIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
 
         <TextView
             android:id="@+id/categoryName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:gravity="center" />
+            android:fontFamily="@string/font_fontFamily_medium"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textSize="11sp" />
 
     </android.support.v7.widget.CardView>
 </LinearLayout>
