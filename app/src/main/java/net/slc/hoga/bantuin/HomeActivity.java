@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -76,6 +77,8 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         Picasso.with(this)
                 .load(ActiveUser.getUser().getPhotoUrl())
                 .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
+
+        fillMenu();
     }
 
     @Override
@@ -131,5 +134,13 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
         setTabActive(tab, true);
+    }
+
+    private void fillMenu(){
+        Menu mainMenu = navMenu.getMenu();
+        mainMenu.add(0,0,Menu.NONE,"Test 1");
+        mainMenu.add(0,1,Menu.NONE,"Test 2");
+        mainMenu.add(0,2,Menu.NONE,"Test 3");
+        mainMenu.add(0,3,Menu.NONE,"Test 4");
     }
 }
