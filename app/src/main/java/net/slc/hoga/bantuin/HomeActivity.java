@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,13 @@ public class HomeActivity extends MasterActivity {
             R.drawable.icon_gears
     };
 
+    private int[] tabIconsRed = {
+            R.drawable.icon_home_red,
+            R.drawable.icon_discover_red,
+            R.drawable.icon_bookmark_red,
+            R.drawable.icon_gears_red
+    };
+
     private String[] tabTitles = {"HOME", "DISCOVER", "MY EVENTS", "ACCOUNT"};
 
     @Override
@@ -42,15 +50,33 @@ public class HomeActivity extends MasterActivity {
         tabLayout = findViewById(R.id.tab);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                setTabActive(tab, true);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                setTabActive(tab, false);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                setTabActive(tab, true);
+            }
+        });
+        tabLayout.getTabAt(0).select();
     }
 
     private void setupTabIcons() {
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             LinearLayout temp = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-            TextView a =  temp.findViewById(R.id.tabText);
-            a.setText(tabTitles[i]);
-            ImageView b = temp.findViewById(R.id.tabIcon);
-            b.setBackgroundResource(tabIcons[i]);
+            TextView textTab =  temp.findViewById(R.id.tabText);
+            textTab.setText(tabTitles[i]);
+            ImageView iconTab = temp.findViewById(R.id.tabIcon);
+            iconTab.setBackgroundResource(tabIcons[i]);
             tabLayout.getTabAt(i).setCustomView(temp);
         }
     }
@@ -62,5 +88,18 @@ public class HomeActivity extends MasterActivity {
         adapter.addFragment(new EventFragment(), tabTitles[2]);
         adapter.addFragment(new AccountFragment(), tabTitles[3]);
         viewPager.setAdapter(adapter);
+    }
+
+    void setTabActive(TabLayout.Tab tab, boolean yes){
+        View temp = tab.getCustomView();
+        TextView textTab = temp.findViewById(R.id.tabText);
+        ImageView iconTab = temp.findViewById(R.id.tabIcon);
+        if(yes){
+            textTab.setTextColor(getResources().getColor(R.color.primaryDarkColor));
+            iconTab.setBackgroundResource(tabIconsRed[tab.getPosition()]);
+        }else{
+            textTab.setTextColor(getResources().getColor(R.color.secondaryTextColor));
+            iconTab.setBackgroundResource(tabIcons[tab.getPosition()]);
+        }
     }
 }
