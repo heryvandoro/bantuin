@@ -50,8 +50,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".UILoginActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".DataActivity" />
         <activity android:name=".HomeActivity" />
     </application>
 

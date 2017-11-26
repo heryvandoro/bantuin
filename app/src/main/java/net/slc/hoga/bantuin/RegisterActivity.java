@@ -51,7 +51,7 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
     }
 
     private void moveToHome(){
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
 
