@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,7 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import net.slc.hoga.bantuin.Adapter.RecyclerAdapter;
+import net.slc.hoga.bantuin.Adapter.CategoryAdapter;
 import net.slc.hoga.bantuin.Model.Category;
 import net.slc.hoga.bantuin.R;
 
@@ -23,9 +24,9 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements ValueEventListener {
 
-    RecyclerView recyclerView;
+    GridView gridView;
     RecyclerView.LayoutManager layoutManager;
-    RecyclerAdapter adapter;
+    CategoryAdapter adapter;
 
     DatabaseReference categoryDatabase;
     ArrayList<Category> categories;
@@ -37,7 +38,6 @@ public class HomeFragment extends Fragment implements ValueEventListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -59,21 +59,18 @@ public class HomeFragment extends Fragment implements ValueEventListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = v.findViewById(R.id.recycler_view);
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        categories = new ArrayList<>();
-        adapter = new RecyclerAdapter(categories,getContext());
-
-        categoryDatabase = FirebaseDatabase.getInstance().getReference();
-        categoryDatabase = categoryDatabase.child("categories");
-        recyclerView.setAdapter(adapter);
-
+        gridView = v.findViewById(R.id.grid_view);
+        initializeComponents();
         categoryDatabase.addListenerForSingleValueEvent(this);
-
+        gridView.setAdapter(adapter);
         return v;
     }
 
-
+    private void initializeComponents(){
+        layoutManager = new LinearLayoutManager(getContext());
+        categories = new ArrayList<>();
+        adapter = new CategoryAdapter(categories,getContext());
+        categoryDatabase = FirebaseDatabase.getInstance().getReference();
+        categoryDatabase = categoryDatabase.child("categories");
+    }
 }

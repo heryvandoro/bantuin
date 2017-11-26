@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import net.slc.hoga.bantuin.Adapter.ViewPagerAdapter;
+import net.slc.hoga.bantuin.Adapter.TabAdapter;
 import net.slc.hoga.bantuin.Fragment.AccountFragment;
 import net.slc.hoga.bantuin.Fragment.DiscoverFragment;
 import net.slc.hoga.bantuin.Fragment.EventFragment;
@@ -82,7 +82,7 @@ public class HomeActivity extends MasterActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
         adapter.addFragment(new HomeFragment(), tabTitles[0]);
         adapter.addFragment(new DiscoverFragment(), tabTitles[1]);
         adapter.addFragment(new EventFragment(), tabTitles[2]);
