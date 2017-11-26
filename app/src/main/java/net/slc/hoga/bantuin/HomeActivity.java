@@ -1,6 +1,7 @@
 package net.slc.hoga.bantuin;
 
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -12,17 +13,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import net.slc.hoga.bantuin.Adapter.TabAdapter;
 import net.slc.hoga.bantuin.Fragment.AccountFragment;
 import net.slc.hoga.bantuin.Fragment.DiscoverFragment;
 import net.slc.hoga.bantuin.Fragment.EventFragment;
 import net.slc.hoga.bantuin.Fragment.HomeFragment;
+import net.slc.hoga.bantuin.Model.ActiveUser;
 
 public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelectedListener{
     TabLayout tabLayout;
     ViewPager viewPager;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle menuToggle;
+    NavigationView navMenu;
 
     private int[] tabIcons = {
             R.drawable.icon_home,
@@ -60,10 +65,17 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         tabLayout.getTabAt(0).select();
 
         drawerLayout = findViewById(R.id.drawer);
-        menuToggle= new ActionBarDrawerToggle(this,drawerLayout,R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        menuToggle= new ActionBarDrawerToggle(this,drawerLayout,R.string.nav_open, R.string.nav_close);
         drawerLayout.addDrawerListener(menuToggle);
         menuToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        navMenu = findViewById(R.id.navigation_menu);
+        ((TextView)navMenu.getHeaderView(0).findViewById(R.id.userName)).setText(ActiveUser.getUser().getDisplayName());
+        ((TextView)navMenu.getHeaderView(0).findViewById(R.id.userEmail)).setText(ActiveUser.getUser().getEmail());
+        Picasso.with(this)
+                .load(ActiveUser.getUser().getPhotoUrl())
+                .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
     }
 
     @Override
