@@ -1,39 +1,30 @@
 package net.slc.hoga.bantuin;
 
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.view.Window;
+import android.view.DragEvent;
+import android.view.View;
+import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import net.slc.hoga.bantuin.Adapter.RecyclerAdapter;
-import net.slc.hoga.bantuin.Fragment.*;
-import net.slc.hoga.bantuin.Model.Category;
+import net.slc.hoga.bantuin.Fragment.AccountFragment;
+import net.slc.hoga.bantuin.Fragment.DiscoverFragment;
+import net.slc.hoga.bantuin.Fragment.EventFragment;
+import net.slc.hoga.bantuin.Fragment.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends MasterActivity {
-
-
-    Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +33,13 @@ public class HomeActivity extends MasterActivity {
         initializeComponent();
     }
 
-
     @Override
     public void initializeComponent() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         tabLayout = findViewById(R.id.tab);
         tabLayout.setupWithViewPager(viewPager);
-
     }
 
     private void setupViewPager(ViewPager viewPager) {

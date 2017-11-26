@@ -1,15 +1,10 @@
 <resources>
 
-    <style name="General" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="BantuinTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryColor</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
-    </style>
-
-    <style name="BantuinTheme" parent="General">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="EditText" parent="BantuinTheme">
@@ -36,9 +31,10 @@
     </style>
 
     <!--LOGIN THEME SECTION-->
-    <style name="BantuinThemeLogin" parent="General">
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">false</item>
+    <style name="BantuinThemeLogin">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryTextColor</item>
     </style>
 
     <style name="EditTextLogin" parent="BantuinThemeLogin">
