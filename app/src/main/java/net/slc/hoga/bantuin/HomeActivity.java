@@ -2,6 +2,11 @@ package net.slc.hoga.bantuin;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,17 +20,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import net.slc.hoga.bantuin.Adapter.RecyclerAdapter;
+import net.slc.hoga.bantuin.Fragment.*;
 import net.slc.hoga.bantuin.Model.Category;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class HomeActivity extends MasterActivity implements ValueEventListener {
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    RecyclerAdapter adapter;
+public class HomeActivity extends MasterActivity {
 
-    DatabaseReference categoryDatabase;
-    ArrayList<Category> categories;
+
+    Toolbar toolbar;
+    TabLayout tabLayout;
+    ViewPager viewPager;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,41 +42,55 @@ public class HomeActivity extends MasterActivity implements ValueEventListener {
         initializeComponent();
     }
 
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            Category category = postSnapshot.getValue(Category.class);
-            categories.add(category);
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
-    }
 
     @Override
     public void initializeComponent() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar()!=null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        viewPager = findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        tabLayout = findViewById(R.id.tab);
+        tabLayout.setupWithViewPager(viewPager);
 
-        categories = new ArrayList<>();
-        adapter = new RecyclerAdapter(categories,this);
+    }
 
-        categoryDatabase = FirebaseDatabase.getInstance().getReference();
-        categoryDatabase = categoryDatabase.child("categories");
-        recyclerView.setAdapter(adapter);
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new HomeFragment(), "Home");
+        adapter.addFragment(new DiscoverFragment(), "Discover");
+        adapter.addFragment(new EventFragment(), "My Events");
+        adapter.addFragment(new AccountFragment(), "Account");
+        viewPager.setAdapter(adapter);
+    }
 
-        categoryDatabase.addListenerForSingleValueEvent(this);
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }

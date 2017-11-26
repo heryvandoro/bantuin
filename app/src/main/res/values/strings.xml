@@ -2,4 +2,7 @@
     <string name="app_name">Bantuin</string>
     <string name="facebook_application_id">1903878179876023</string>
     <string name="facebook_login_protocol_scheme">fb1903878179876023</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
