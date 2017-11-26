@@ -1,7 +1,6 @@
 package net.slc.hoga.bantuin.Adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class CategoryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View temp = LayoutInflater.from(context).inflate(R.layout.card_layout, null);
+        View temp = LayoutInflater.from(context).inflate(R.layout.card_category, null);
         ((TextView)temp.findViewById(R.id.categoryName)).setText(categories.get(i).getName());
         Picasso.with(context)
                 .load(categories.get(i).getIcon())

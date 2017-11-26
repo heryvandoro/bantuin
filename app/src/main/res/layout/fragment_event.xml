@@ -1,12 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/PaddingLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="net.slc.hoga.bantuin.Fragment.EventFragment">
+    tools:context="net.slc.hoga.bantuin.Fragment.HomeFragment">
 
-    <TextView
+    <ListView
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content" />
 
-</FrameLayout>
+</LinearLayout>
