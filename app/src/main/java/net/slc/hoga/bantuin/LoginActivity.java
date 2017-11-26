@@ -82,7 +82,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     }
 
     public void initializeComponent(){
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(this);
 

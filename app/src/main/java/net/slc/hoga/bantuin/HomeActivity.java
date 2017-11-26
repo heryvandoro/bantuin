@@ -1,8 +1,12 @@
 package net.slc.hoga.bantuin;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.view.Window;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +31,6 @@ public class HomeActivity extends MasterActivity implements ValueEventListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         initializeComponent();
     }
 
@@ -47,6 +50,13 @@ public class HomeActivity extends MasterActivity implements ValueEventListener {
 
     @Override
     public void initializeComponent() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         recyclerView = findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -59,5 +69,6 @@ public class HomeActivity extends MasterActivity implements ValueEventListener {
         recyclerView.setAdapter(adapter);
 
         categoryDatabase.addListenerForSingleValueEvent(this);
+
     }
 }
