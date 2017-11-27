@@ -43,7 +43,6 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
         actionBar.setTitle(getIntent().getStringExtra("category_name"));
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-
         layoutManager = new LinearLayoutManager(this);
         events = new ArrayList<>();
         adapter = new EventAdapter(events,this);

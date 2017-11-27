@@ -26,7 +26,9 @@ import net.slc.hoga.bantuin.Fragment.EventFragment;
 import net.slc.hoga.bantuin.Fragment.HomeFragment;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 
-public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelectedListener, MenuItem.OnMenuItemClickListener{
+public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelectedListener,
+        MenuItem.OnMenuItemClickListener,
+        View.OnClickListener{
     TabLayout tabLayout;
     ViewPager viewPager;
     DrawerLayout drawerLayout;
@@ -78,6 +80,7 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         navMenu = findViewById(R.id.navigation_menu);
         ((TextView)navMenu.getHeaderView(0).findViewById(R.id.userName)).setText(ActiveUser.getUser().getDisplayName());
         ((TextView)navMenu.getHeaderView(0).findViewById(R.id.userEmail)).setText(ActiveUser.getUser().getEmail());
+        navMenu.getHeaderView(0).setOnClickListener(this);
         Picasso.with(this)
                 .load(ActiveUser.getUser().getPhotoUrl())
                 .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
@@ -143,7 +146,8 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
     private void fillMenu(){
         Menu mainMenu = navMenu.getMenu();
         mainMenu.add(0,0,Menu.NONE,"Add Event").setOnMenuItemClickListener(this);
-        mainMenu.add(0,1,Menu.NONE,"Logout").setOnMenuItemClickListener(this);
+        mainMenu.add(0,1,Menu.NONE,"My Account").setOnMenuItemClickListener(this);
+        mainMenu.add(0,2,Menu.NONE,"Logout").setOnMenuItemClickListener(this);
     }
 
     @Override
@@ -155,12 +159,15 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
                 i = new Intent(this, AddEventActivity.class);
                 break;
             case 1 :
+                i = new Intent(this, AccountActivity.class);
+                break;
+            case 2 :
                 ActiveUser.logout();
                 i = new Intent(this, LoginActivity.class);
                 break;
         }
         startActivity(i);
-        if(menuItem.getItemId()==1) finish();
+        if(menuItem.getItemId()==2) finish();
         return false;
     }
 
@@ -178,5 +185,12 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
                 dblClick=false;
             }
         }, 2000);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId()==R.id.menuHeader){
+            startActivity(new Intent(this, AccountActivity.class));
+        }
     }
 }
