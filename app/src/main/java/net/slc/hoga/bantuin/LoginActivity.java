@@ -210,7 +210,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String uid = ActiveUser.getUser().getUid();
                 if(dataSnapshot.hasChild(uid)) return;
-                User user = new User(ActiveUser.getUser().getDisplayName(),ActiveUser.getUser().getEmail(), Config.TEMP_PHOTO);
+                User user = new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(), ActiveUser.getUser().getPhotoUrl().toString());
                 userDatabase.child(uid).setValue(user);
             }
 

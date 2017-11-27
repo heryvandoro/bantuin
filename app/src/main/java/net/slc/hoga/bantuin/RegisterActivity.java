@@ -1,6 +1,7 @@
 package net.slc.hoga.bantuin;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -83,6 +84,7 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
         if (task.isSuccessful()) {
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(textFullname.getText().toString())
+                    .setPhotoUri(Uri.parse(Config.TEMP_PHOTO))
                     .build();
 
             FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates)
