@@ -12,9 +12,18 @@ public class Event {
     private String date;
     private String time;
     private List<String> pictures;
+    private Long category;
 
     public Event() {
 
+    }
+
+    public Long getCategory() {
+        return category;
+    }
+
+    public void setCategory(Long category) {
+        this.category = category;
     }
 
     public String getTitle() {

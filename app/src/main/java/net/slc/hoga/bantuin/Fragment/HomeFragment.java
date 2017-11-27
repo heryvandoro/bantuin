@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,6 +80,9 @@ public class HomeFragment extends Fragment implements ValueEventListener, Adapte
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        startActivity(new Intent(this.getContext(), CategoryDetailActivity.class));
+        Intent intent = new Intent(this.getContext(), CategoryDetailActivity.class);
+        intent.putExtra("category_name",categories.get(i).getName());
+        intent.putExtra("category_position",Long.toString(i));
+        startActivity(intent);
     }
 }

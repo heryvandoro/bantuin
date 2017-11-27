@@ -66,9 +66,15 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            Event event = postSnapshot.getValue(Event.class);
-            events.add(event);
-            adapter.notifyDataSetChanged();
+            try {
+                Event event = postSnapshot.getValue(Event.class);
+                events.add(event);
+                adapter.notifyDataSetChanged();
+            }
+            catch (Exception e){
+                Log.w("tes",e.getMessage().toString());
+            }
+
         }
     }
 
