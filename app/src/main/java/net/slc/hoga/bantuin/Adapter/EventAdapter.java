@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
@@ -39,10 +42,10 @@ public class EventAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View temp = LayoutInflater.from(context).inflate(R.layout.card_event, null);
         ((TextView)temp.findViewById(R.id.eventTitle)).setText(events.get(i).getTitle());
-//        Picasso.with(context)
-//                .load(events.get(i).getIcon())
-//                .resize(100, 100)
-//                .into((ImageView) temp.findViewById(R.id.categoryIcon));
+        ((TextView)temp.findViewById(R.id.eventDescription)).setText(events.get(i).getDescription());
+        Picasso.with(context)
+                .load(events.get(i).getPictures().get(0))
+                .into((ImageView) temp.findViewById(R.id.eventPhoto));
         return temp;
     }
 }

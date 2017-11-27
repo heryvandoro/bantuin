@@ -1,5 +1,7 @@
 package net.slc.hoga.bantuin.Model;
 
+import java.util.List;
+
 public class Event {
     private String title;
     private String description;
@@ -9,6 +11,8 @@ public class Event {
     private String organizer;
     private String date;
     private String time;
+    private List<String> pictures;
+
     public Event() {
 
     }
@@ -75,5 +79,13 @@ public class Event {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public List<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<String> pictures) {
+        this.pictures = pictures;
     }
 }

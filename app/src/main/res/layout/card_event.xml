@@ -7,21 +7,47 @@
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_category"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@color/primaryTextColor"
-        card_view:cardCornerRadius="4dp"
-        card_view:contentPadding="10dp">
+        card_view:cardCornerRadius="4dp">
 
-        <TextView
-            android:id="@+id/eventTitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:fontFamily="@string/font_fontFamily_medium"
-            android:gravity="center"
-            android:textAllCaps="true"
-            android:textSize="11sp" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/eventPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:scaleType="fitXY" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/eventTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:fontFamily="@string/font_fontFamily_medium"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/eventDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@string/font_fontFamily_medium"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 </LinearLayout>
