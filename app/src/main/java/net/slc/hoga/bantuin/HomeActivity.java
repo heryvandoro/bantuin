@@ -1,5 +1,6 @@
 package net.slc.hoga.bantuin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -23,7 +24,7 @@ import net.slc.hoga.bantuin.Fragment.EventFragment;
 import net.slc.hoga.bantuin.Fragment.HomeFragment;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 
-public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelectedListener{
+public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelectedListener, MenuItem.OnMenuItemClickListener{
     TabLayout tabLayout;
     ViewPager viewPager;
     DrawerLayout drawerLayout;
@@ -138,9 +139,25 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
 
     private void fillMenu(){
         Menu mainMenu = navMenu.getMenu();
-        mainMenu.add(0,0,Menu.NONE,"Test 1");
-        mainMenu.add(0,1,Menu.NONE,"Test 2");
-        mainMenu.add(0,2,Menu.NONE,"Test 3");
-        mainMenu.add(0,3,Menu.NONE,"Test 4");
+        mainMenu.add(0,0,Menu.NONE,"Add Event").setOnMenuItemClickListener(this);
+        mainMenu.add(0,1,Menu.NONE,"Logout").setOnMenuItemClickListener(this);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        drawerLayout.closeDrawers();
+        Intent i = null;
+        switch(menuItem.getItemId()){
+            case 0 :
+                i = new Intent(this, AddEventActivity.class);
+                break;
+            case 1 :
+                ActiveUser.logout();
+                i = new Intent(this, LoginActivity.class);
+                break;
+        }
+        startActivity(i);
+        if(menuItem.getItemId()==1) finish();
+        return false;
     }
 }

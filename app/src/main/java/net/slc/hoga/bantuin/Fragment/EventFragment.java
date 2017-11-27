@@ -64,7 +64,6 @@ public class EventFragment extends Fragment implements ValueEventListener{
         eventDatabase = eventDatabase.child("events");
     }
 
-
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
