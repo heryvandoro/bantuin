@@ -1,5 +1,6 @@
 package net.slc.hoga.bantuin.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.FirebaseException;
@@ -20,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import net.slc.hoga.bantuin.Adapter.CategoryAdapter;
 import net.slc.hoga.bantuin.Adapter.EventAdapter;
+import net.slc.hoga.bantuin.EventDetailActivity;
 import net.slc.hoga.bantuin.Model.Category;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
@@ -27,7 +30,7 @@ import net.slc.hoga.bantuin.R;
 import java.util.ArrayList;
 
 
-public class EventFragment extends Fragment implements ValueEventListener{
+public class EventFragment extends Fragment implements ValueEventListener, AdapterView.OnItemClickListener{
     RecyclerView.LayoutManager layoutManager;
     EventAdapter adapter;
 
@@ -53,6 +56,7 @@ public class EventFragment extends Fragment implements ValueEventListener{
         listView = v.findViewById(R.id.list_view);
         eventDatabase.addListenerForSingleValueEvent(this);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
         return v;
     }
 
@@ -76,5 +80,10 @@ public class EventFragment extends Fragment implements ValueEventListener{
     @Override
     public void onCancelled(DatabaseError databaseError) {
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        startActivity(new Intent(this.getContext(), EventDetailActivity.class));
     }
 }
