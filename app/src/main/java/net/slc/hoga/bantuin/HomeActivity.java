@@ -1,13 +1,14 @@
 package net.slc.hoga.bantuin;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
@@ -35,6 +36,9 @@ public class HomeActivity extends MasterActivity implements
     NavigationView navMenu;
     boolean dblClick = false;
     BottomNavigationView bottomNavigationView;
+
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,9 @@ public class HomeActivity extends MasterActivity implements
 
         fillMenu();
 
+        fragmentManager  = getSupportFragmentManager();
+        loadFragment(0);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -81,7 +88,6 @@ public class HomeActivity extends MasterActivity implements
                 return false;
             }
         });
-        loadFragment(0);
     }
 
     @Override
@@ -143,6 +149,7 @@ public class HomeActivity extends MasterActivity implements
     }
 
     private void loadFragment(int index){
+        fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment = null;
         switch (index){
             case 0 :
@@ -158,8 +165,6 @@ public class HomeActivity extends MasterActivity implements
                 fragment = new FriendsFragment();
                 break;
         }
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.target_fragment, fragment);
-        ft.commit();
+        fragmentTransaction.replace(R.id.target_fragment, fragment).commit();
     }
 }

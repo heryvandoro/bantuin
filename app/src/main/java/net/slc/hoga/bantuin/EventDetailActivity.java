@@ -10,6 +10,12 @@ import android.text.style.StyleSpan;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,12 +27,15 @@ import net.slc.hoga.bantuin.Model.Event;
 
 import java.util.ArrayList;
 
-public class EventDetailActivity extends MasterActivity implements ValueEventListener {
+public class EventDetailActivity extends MasterActivity implements ValueEventListener,OnMapReadyCallback {
 
     ImageView imageView;
     TextView category,user,location,time;
 
     DatabaseReference database;
+
+    GoogleMap map;
+
     public static Event event;
 
     @Override
@@ -46,17 +55,15 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
         imageView = findViewById(R.id.imageView);
         category = findViewById(R.id.category);
         user = findViewById(R.id.user);
-        time = findViewById(R.id.time);
-        location = findViewById(R.id.location);
+        location = findViewById(R.id.loctime);
 
-        time.setText(makeString("Time",": "+event.getTime()));
-        location.setText(makeString("Location",": "+event.getLocation()));
+        location.setText(makeString("",event.getTime()+" at "+event.getLocation()));
 
         database = FirebaseDatabase.getInstance().getReference();
         database.child("users").child(event.getOrganizer()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                user.setText(makeString("Organizer",": "+dataSnapshot.getValue(String.class)));
+                user.setText(makeString("",dataSnapshot.getValue(String.class)));
             }
 
             @Override
@@ -68,7 +75,7 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
         database.child("categories").child(event.getCategory().toString()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                category.setText(makeString("Category",": "+dataSnapshot.getValue(String.class)));
+                category.setText(makeString(dataSnapshot.getValue(String.class),""));
             }
 
             @Override
@@ -80,6 +87,11 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
         Picasso.with(this)
                 .load(event.getPictures().get(0))
                 .into(imageView);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
     }
 
     @Override
@@ -97,5 +109,13 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
         SpannableString str = new SpannableString(boldText + normalText);
         str.setSpan(new StyleSpan(Typeface.BOLD), 0, boldText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return str;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        LatLng loc = new LatLng(event.getLat(), event.getLng());
+        map.addMarker(new MarkerOptions().position(loc).title(event.getLocation()));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc,16));
     }
 }
