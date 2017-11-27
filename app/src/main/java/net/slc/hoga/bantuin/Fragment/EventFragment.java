@@ -84,6 +84,8 @@ public class EventFragment extends Fragment implements ValueEventListener, Adapt
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        startActivity(new Intent(this.getContext(), EventDetailActivity.class));
+        Intent intent = new Intent(getContext(), EventDetailActivity.class);
+        EventDetailActivity.event = events.get(i);
+        startActivity(intent);
     }
 }

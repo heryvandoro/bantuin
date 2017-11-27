@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import net.slc.hoga.bantuin.Adapter.EventAdapter;
+import net.slc.hoga.bantuin.CategoryDetailActivity;
 import net.slc.hoga.bantuin.EventDetailActivity;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
@@ -66,15 +67,10 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            try {
-                Event event = postSnapshot.getValue(Event.class);
-                events.add(event);
-                adapter.notifyDataSetChanged();
-            }
-            catch (Exception e){
-                Log.w("tes",e.getMessage().toString());
-            }
 
+            Event event = postSnapshot.getValue(Event.class);
+            events.add(event);
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -85,6 +81,8 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        startActivity(new Intent(this.getContext(), EventDetailActivity.class));
+        Intent intent = new Intent(getContext(), EventDetailActivity.class);
+        EventDetailActivity.event = events.get(i);
+        startActivity(intent);
     }
 }

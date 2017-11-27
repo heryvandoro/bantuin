@@ -1,9 +1,8 @@
 package net.slc.hoga.bantuin;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -59,7 +58,9 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        startActivity(new Intent(this, EventDetailActivity.class));
+        Intent intent = new Intent(this, EventDetailActivity.class);
+        EventDetailActivity.event = events.get(i);
+        startActivity(intent);
     }
 
     @Override
