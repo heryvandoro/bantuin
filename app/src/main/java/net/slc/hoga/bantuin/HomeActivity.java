@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Adapter.TabAdapter;
-import net.slc.hoga.bantuin.Fragment.AccountFragment;
+import net.slc.hoga.bantuin.Fragment.FriendsFragment;
 import net.slc.hoga.bantuin.Fragment.DiscoverFragment;
 import net.slc.hoga.bantuin.Fragment.EventFragment;
 import net.slc.hoga.bantuin.Fragment.HomeFragment;
@@ -38,17 +38,17 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
             R.drawable.icon_home,
             R.drawable.icon_discover,
             R.drawable.icon_bookmark,
-            R.drawable.icon_gears
+            R.drawable.icon_happy
     };
 
     private int[] tabIconsRed = {
             R.drawable.icon_home_red,
             R.drawable.icon_discover_red,
             R.drawable.icon_bookmark_red,
-            R.drawable.icon_gears_red
+            R.drawable.icon_happy_red
     };
 
-    private String[] tabTitles = {"HOME", "DISCOVER", "MY EVENTS", "ACCOUNT"};
+    private String[] tabTitles = {"HOME", "DISCOVER", "MY EVENTS", "FRIENDS"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         adapter.addFragment(new HomeFragment(), tabTitles[0]);
         adapter.addFragment(new DiscoverFragment(), tabTitles[1]);
         adapter.addFragment(new EventFragment(), tabTitles[2]);
-        adapter.addFragment(new AccountFragment(), tabTitles[3]);
+        adapter.addFragment(new FriendsFragment(), tabTitles[3]);
         viewPager.setAdapter(adapter);
     }
 
