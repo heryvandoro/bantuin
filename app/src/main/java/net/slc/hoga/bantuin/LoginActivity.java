@@ -51,6 +51,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     public GoogleSignInClient googleSignInClient;
     private AuthCredential credential;
     private DatabaseReference userDatabase;
+    private User tempUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +60,9 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initializeComponent();
-        if(ActiveUser.isLogged()){
-            addAccountToDB();
-            moveToHome();
-        }
         checkAvailbility();
+
+        if(ActiveUser.isLogged()) checkAccountExistsDB();
     }
 
     @Override
@@ -169,7 +168,8 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
                 FirebaseAuth.getInstance().signInWithCredential(credential)
                         .addOnCompleteListener(this, this);
             } catch (ApiException e) {
-                Toast.makeText(this, "Authentication Failed", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                Toast.makeText(this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
         }else{
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
@@ -178,11 +178,9 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
 
     @Override
     public void onComplete(@NonNull Task task) {
-
         if(task.isSuccessful()){
             ActiveUser.setUser(FirebaseAuth.getInstance().getCurrentUser());
-            addAccountToDB();
-            moveToHome();
+            checkAccountExistsDB();
         }else{
             Toast.makeText(this, task.getException().getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
@@ -204,14 +202,19 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
         startActivity(new Intent(this, RegisterActivity.class));
     }
 
-    private void addAccountToDB(){
+    private void checkAccountExistsDB(){
         userDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String uid = ActiveUser.getUser().getUid();
-                if(dataSnapshot.hasChild(uid)) return;
-                User user = new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(), ActiveUser.getUser().getPhotoUrl().toString());
-                userDatabase.child(uid).setValue(user);
+                if(dataSnapshot.hasChild(ActiveUser.getUser().getUid())){
+                    tempUser = dataSnapshot.child(uid).getValue(User.class);
+                }else{
+                    tempUser = new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(), ActiveUser.getUser().getPhotoUrl().toString());
+                    userDatabase.child(uid).setValue(tempUser);
+                }
+                ActiveUser.setUserDB(tempUser);
+                moveToHome();
             }
 
             @Override
