@@ -3,6 +3,7 @@ package net.slc.hoga.bantuin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -25,17 +26,18 @@ import net.slc.hoga.bantuin.Fragment.FriendsFragment;
 import net.slc.hoga.bantuin.Fragment.DiscoverFragment;
 import net.slc.hoga.bantuin.Fragment.EventFragment;
 import net.slc.hoga.bantuin.Fragment.HomeFragment;
+import net.slc.hoga.bantuin.Helper.BottomNavigationViewHelper;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 
 public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelectedListener,
         MenuItem.OnMenuItemClickListener,
         View.OnClickListener{
-    TabLayout tabLayout;
     ViewPager viewPager;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle menuToggle;
     NavigationView navMenu;
     boolean dblClick = false;
+    BottomNavigationView bottomNavigationView;
 
     private int[] tabIcons = {
             R.drawable.icon_home,
@@ -65,12 +67,8 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        tabLayout = findViewById(R.id.tab);
-        tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
-
-        tabLayout.addOnTabSelectedListener(this);
-        tabLayout.getTabAt(0).select();
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
         drawerLayout = findViewById(R.id.drawer);
         menuToggle= new ActionBarDrawerToggle(this,drawerLayout,R.string.nav_open, R.string.nav_close);
@@ -94,17 +92,6 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         if(menuToggle.onOptionsItemSelected(item))
             return true;
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setupTabIcons() {
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            LinearLayout temp = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-            TextView textTab =  temp.findViewById(R.id.tabText);
-            textTab.setText(tabTitles[i]);
-            ImageView iconTab = temp.findViewById(R.id.tabIcon);
-            iconTab.setBackgroundResource(tabIcons[i]);
-            tabLayout.getTabAt(i).setCustomView(temp);
-        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
