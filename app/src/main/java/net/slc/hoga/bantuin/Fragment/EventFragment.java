@@ -1,42 +1,17 @@
 package net.slc.hoga.bantuin.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import com.google.firebase.FirebaseException;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import net.slc.hoga.bantuin.Adapter.CategoryAdapter;
-import net.slc.hoga.bantuin.Adapter.EventAdapter;
-import net.slc.hoga.bantuin.EventDetailActivity;
-import net.slc.hoga.bantuin.Model.Category;
-import net.slc.hoga.bantuin.Model.Event;
+import net.slc.hoga.bantuin.Adapter.TabAdapter;
 import net.slc.hoga.bantuin.R;
 
-import java.util.ArrayList;
-
-
-public class EventFragment extends Fragment implements ValueEventListener, AdapterView.OnItemClickListener{
-    RecyclerView.LayoutManager layoutManager;
-    EventAdapter adapter;
-
-    DatabaseReference eventDatabase;
-    ArrayList<Event> events;
-    ListView listView;
+public class EventFragment extends Fragment{
 
     public EventFragment() {
         // Required empty public constructor
@@ -51,41 +26,19 @@ public class EventFragment extends Fragment implements ValueEventListener, Adapt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_event, container, false);
-        initializeComponents();
-        listView = v.findViewById(R.id.list_view);
-        eventDatabase.addListenerForSingleValueEvent(this);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
-        return v;
+        View view = inflater.inflate(R.layout.fragment_event, container, false);
+
+        TabAdapter adapter = new TabAdapter(getChildFragmentManager());
+        adapter.addFragment(new DiscoverFragment(), "My Events");
+        adapter.addFragment(new DiscoverFragment(), "Upcoming");
+        adapter.addFragment(new DiscoverFragment(), "History");
+
+        ViewPager viewPager = view.findViewById(R.id.viewpager);
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = view.findViewById(R.id.tab);
+        tabLayout.setupWithViewPager(viewPager);
+        return view;
     }
 
-    private void initializeComponents(){
-        layoutManager = new LinearLayoutManager(getContext());
-        events = new ArrayList<>();
-        adapter = new EventAdapter(events,getContext());
-        eventDatabase = FirebaseDatabase.getInstance().getReference();
-        eventDatabase = eventDatabase.child("events");
-    }
-
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            Event event = postSnapshot.getValue(Event.class);
-            events.add(event);
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Intent intent = new Intent(getContext(), EventDetailActivity.class);
-        EventDetailActivity.event = events.get(i);
-        startActivity(intent);
-    }
 }

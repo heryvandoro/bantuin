@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
             R.drawable.icon_happy_red
     };
 
-    private String[] tabTitles = {"HOME", "DISCOVER", "MY EVENTS", "FRIENDS"};
+    private String[] tabTitles = {"HOME", "DISCOVER", "EVENTS", "FRIENDS"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
