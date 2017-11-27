@@ -1,12 +1,10 @@
 package net.slc.hoga.bantuin.Fragment;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import net.slc.hoga.bantuin.Adapter.EventAdapter;
-import net.slc.hoga.bantuin.CategoryDetailActivity;
 import net.slc.hoga.bantuin.EventDetailActivity;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;

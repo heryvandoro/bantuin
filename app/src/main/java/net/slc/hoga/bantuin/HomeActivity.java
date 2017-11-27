@@ -1,59 +1,40 @@
 package net.slc.hoga.bantuin;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import net.slc.hoga.bantuin.Adapter.TabAdapter;
-import net.slc.hoga.bantuin.Fragment.FriendsFragment;
 import net.slc.hoga.bantuin.Fragment.DiscoverFragment;
 import net.slc.hoga.bantuin.Fragment.EventFragment;
+import net.slc.hoga.bantuin.Fragment.FriendsFragment;
 import net.slc.hoga.bantuin.Fragment.HomeFragment;
 import net.slc.hoga.bantuin.Helper.BottomNavigationViewHelper;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 
-public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelectedListener,
+public class HomeActivity extends MasterActivity implements
         MenuItem.OnMenuItemClickListener,
         View.OnClickListener{
-    ViewPager viewPager;
+
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle menuToggle;
     NavigationView navMenu;
     boolean dblClick = false;
     BottomNavigationView bottomNavigationView;
-
-    private int[] tabIcons = {
-            R.drawable.icon_home,
-            R.drawable.icon_discover,
-            R.drawable.icon_bookmark,
-            R.drawable.icon_happy
-    };
-
-    private int[] tabIconsRed = {
-            R.drawable.icon_home_red,
-            R.drawable.icon_discover_red,
-            R.drawable.icon_bookmark_red,
-            R.drawable.icon_happy_red
-    };
-
-    private String[] tabTitles = {"HOME", "DISCOVER", "EVENTS", "FRIENDS"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +45,6 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
 
     @Override
     public void initializeComponent() {
-        viewPager = findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -85,6 +64,24 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
                 .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
 
         fillMenu();
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_home :
+                        loadFragment(0); return true;
+                    case R.id.action_discover :
+                        loadFragment(1); return true;
+                    case R.id.action_events :
+                        loadFragment(2); return true;
+                    case R.id.action_friends :
+                        loadFragment(3); return true;
+                }
+                return false;
+            }
+        });
+        loadFragment(0);
     }
 
     @Override
@@ -92,43 +89,6 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         if(menuToggle.onOptionsItemSelected(item))
             return true;
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        TabAdapter adapter = new TabAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HomeFragment(), tabTitles[0]);
-        adapter.addFragment(new DiscoverFragment(), tabTitles[1]);
-        adapter.addFragment(new EventFragment(), tabTitles[2]);
-        adapter.addFragment(new FriendsFragment(), tabTitles[3]);
-        viewPager.setAdapter(adapter);
-    }
-
-    void setTabActive(TabLayout.Tab tab, boolean yes){
-        View temp = tab.getCustomView();
-        TextView textTab = temp.findViewById(R.id.tabText);
-        ImageView iconTab = temp.findViewById(R.id.tabIcon);
-        if(yes){
-            textTab.setTextColor(getResources().getColor(R.color.primaryDarkColor));
-            iconTab.setBackgroundResource(tabIconsRed[tab.getPosition()]);
-        }else{
-            textTab.setTextColor(getResources().getColor(R.color.secondaryTextColor));
-            iconTab.setBackgroundResource(tabIcons[tab.getPosition()]);
-        }
-    }
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        setTabActive(tab, true);
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-        setTabActive(tab, false);
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-        setTabActive(tab, true);
     }
 
     private void fillMenu(){
@@ -180,5 +140,26 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         if(view.getId()==R.id.menuHeader){
             startActivity(new Intent(this, AccountActivity.class));
         }
+    }
+
+    private void loadFragment(int index){
+        Fragment fragment = null;
+        switch (index){
+            case 0 :
+                fragment = new HomeFragment();
+                break;
+            case 1 :
+                fragment = new DiscoverFragment();
+                break;
+            case 2 :
+                fragment = new EventFragment();
+                break;
+            case 3 :
+                fragment = new FriendsFragment();
+                break;
+        }
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.target_fragment, fragment);
+        ft.commit();
     }
 }
