@@ -2,6 +2,7 @@ package net.slc.hoga.bantuin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +32,7 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle menuToggle;
     NavigationView navMenu;
+    boolean dblClick = false;
 
     private int[] tabIcons = {
             R.drawable.icon_home,
@@ -159,5 +162,21 @@ public class HomeActivity extends MasterActivity implements TabLayout.OnTabSelec
         startActivity(i);
         if(menuItem.getItemId()==1) finish();
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (dblClick) {
+            super.onBackPressed();
+            return;
+        }
+        dblClick = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dblClick=false;
+            }
+        }, 2000);
     }
 }
