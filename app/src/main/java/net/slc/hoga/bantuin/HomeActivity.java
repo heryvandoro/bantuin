@@ -60,11 +60,11 @@ public class HomeActivity extends MasterActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         navMenu = findViewById(R.id.navigation_menu);
-        ((TextView)navMenu.getHeaderView(0).findViewById(R.id.userName)).setText(ActiveUser.getUserDB().getName());
-        ((TextView)navMenu.getHeaderView(0).findViewById(R.id.userEmail)).setText(ActiveUser.getUserDB().getEmail());
+        ((TextView)navMenu.getHeaderView(0).findViewById(R.id.userName)).setText(ActiveUser.getUser().getDisplayName());
+        ((TextView)navMenu.getHeaderView(0).findViewById(R.id.userEmail)).setText(ActiveUser.getUser().getEmail());
         navMenu.getHeaderView(0).setOnClickListener(this);
         Picasso.with(this)
-                .load(ActiveUser.getUserDB().getPhoto())
+                .load(ActiveUser.getUser().getPhotoUrl())
                 .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
 
         fillMenu();

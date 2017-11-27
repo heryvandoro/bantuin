@@ -44,7 +44,7 @@ public class EventAdapter extends BaseAdapter {
         ((TextView)temp.findViewById(R.id.eventTitle)).setText(events.get(i).getTitle());
         ((TextView)temp.findViewById(R.id.eventDescription)).setText(events.get(i).getDescription());
         Picasso.with(context)
-                .load(events.get(i).getPictures().get(0))
+                .load(events.get(i).getPictures().get(0)).placeholder(context.getResources().getDrawable(R.drawable.load_event))
                 .into((ImageView) temp.findViewById(R.id.eventPhoto));
         return temp;
     }

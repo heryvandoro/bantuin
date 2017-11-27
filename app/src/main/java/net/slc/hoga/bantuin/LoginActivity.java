@@ -62,7 +62,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
         initializeComponent();
         checkAvailbility();
 
-        if(ActiveUser.isLogged()) checkAccountExistsDB();
+        if(ActiveUser.isLogged()) moveToHome();
     }
 
     @Override
@@ -207,13 +207,10 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String uid = ActiveUser.getUser().getUid();
-                if(dataSnapshot.hasChild(ActiveUser.getUser().getUid())){
-                    tempUser = dataSnapshot.child(uid).getValue(User.class);
-                }else{
+                if(!dataSnapshot.hasChild(uid)){
                     tempUser = new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(), ActiveUser.getUser().getPhotoUrl().toString());
                     userDatabase.child(uid).setValue(tempUser);
                 }
-                ActiveUser.setUserDB(tempUser);
                 moveToHome();
             }
 

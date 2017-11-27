@@ -96,7 +96,6 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
                                 String uid = ActiveUser.getUser().getUid();
                                 User user = new User(ActiveUser.getUser().getDisplayName(),ActiveUser.getUser().getEmail(), Config.TEMP_PHOTO);
                                 userDatabase.child(uid).setValue(user);
-                                ActiveUser.setUserDB(user);
                                 moveToHome();
                             }
                         }
