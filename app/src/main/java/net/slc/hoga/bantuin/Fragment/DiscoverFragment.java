@@ -47,7 +47,7 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_event, container, false);
+        View v = inflater.inflate(R.layout.fragment_discover, container, false);
         initializeComponents();
         listView = v.findViewById(R.id.list_view);
         eventDatabase.addListenerForSingleValueEvent(this);

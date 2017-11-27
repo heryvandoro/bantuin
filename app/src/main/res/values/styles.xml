@@ -16,6 +16,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@color/primaryColor</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -23,7 +25,7 @@
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingRight">20dp</item>
         <item name="android:paddingBottom">20dp</item>
-        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingTop">10dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">true</item>
