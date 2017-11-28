@@ -11,19 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import net.slc.hoga.bantuin.Adapter.EventAdapter;
 import net.slc.hoga.bantuin.EventDetailActivity;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EventPartFragment extends Fragment implements AdapterView.OnItemClickListener {
     RecyclerView.LayoutManager layoutManager;

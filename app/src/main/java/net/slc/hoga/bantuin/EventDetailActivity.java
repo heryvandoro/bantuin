@@ -121,7 +121,8 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
 
             for (int i = 0; i < adapter.getCount(); i++) {
                 listViewVolunteer.addView(adapter.getView(i, null, listViewVolunteer));
-                if(((User)adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid())) removeJoin();
+                if (((User) adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid()))
+                    removeJoin();
             }
         }
     }
@@ -157,16 +158,13 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-
         ImageButton closeButton = customView.findViewById(R.id.modalClose);
-
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 modal.dismiss();
             }
         });
-
         modalText = customView.findViewById(R.id.modalText);
     }
 
@@ -178,10 +176,15 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     }
 
     private void joinEvent() {
-        if (isJoined())
+        if (isJoined()){
             modalText.setText("Event already joined!");
-        else
+        } else {
+            database.child("volunteers").child(ActiveUser.getUser()
+                    .getUid()).setValue(new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(),
+                    ActiveUser.getUser().getPhotoUrl().toString(), ActiveUser.getUser().getUid()));
             modalText.setText("Thankyou for join this event :)");
+            removeJoin();
+        }
         modal.showAtLocation(findViewById(R.id.rel), Gravity.CENTER, 0, 0);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -191,7 +194,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         }, 2000);
     }
 
-    private void removeJoin(){
+    private void removeJoin() {
         ViewGroup layout = (ViewGroup) btnJoin.getParent();
         if (null != layout) {
             layout.removeView(btnJoin);
