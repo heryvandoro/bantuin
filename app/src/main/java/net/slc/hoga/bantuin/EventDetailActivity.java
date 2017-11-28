@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
 
     PopupWindow modal;
     ArrayList<User> volunteers;
+    SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +73,14 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     public void initializeComponent() {
         eventKey = getIntent().getStringExtra("key");
         database = FirebaseDatabase.getInstance().getReference()
-                .child("events").child(eventKey);
+                .child("events");
 
         imageView = findViewById(R.id.imageView);
         category = findViewById(R.id.category);
         user = findViewById(R.id.user);
         location = findViewById(R.id.loctime);
 
-        database.addValueEventListener(new CustomFirebaseListener() {
+        database.child(eventKey).addValueEventListener(new CustomFirebaseListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 event = dataSnapshot.getValue(Event.class);
@@ -107,9 +109,11 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                 .load(event.getPictures().get(0)).placeholder(getResources().getDrawable(R.drawable.load_event))
                 .into(imageView);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        if (mapFragment != null)
+            mapFragment.getMapAsync(this);
 
         if (event.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
             removeJoin();
@@ -121,7 +125,8 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             listViewVolunteer.removeAllViews();
 
             for (int i = 0; i < adapter.getCount(); i++) {
-                if(((User) adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid())) continue;
+                if (((User) adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid()))
+                    continue;
                 View temp = adapter.getView(i, null, listViewVolunteer);
                 listViewVolunteer.addView(temp);
                 temp.setTag(((User) adapter.getItem(i)).getUid());
@@ -187,14 +192,46 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
 
     private void joinEvent() {
         if (isJoined()) {
-            modalText.setText("Event already joined!");
+            showModal("Event already joined!");
         } else {
-            database.child("volunteers").child(ActiveUser.getUser()
-                    .getUid()).setValue(new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(),
-                    ActiveUser.getUser().getPhotoUrl().toString(), ActiveUser.getUser().getUid()));
-            modalText.setText("Thankyou for join this event :)");
-            removeJoin();
+            database.addListenerForSingleValueEvent(new CustomFirebaseListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    boolean isBentrok = false;
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        Event temp = postSnapshot.getValue(Event.class);
+                        if (temp.getKey().equals(eventKey)) continue;
+                        if (!temp.getDate().equals(event.getDate())) continue;
+                        if (temp.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
+                            isBentrok = true;
+                            break;
+                        }
+                        ArrayList<User> vol = new ArrayList<>(temp.getVolunteers().values());
+                        for (User x : vol) {
+                            if (x.getUid().equals(ActiveUser.getUser().getUid())) {
+                                isBentrok = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isBentrok) {
+                        showModal("Ups, can't join! There are an event on the day.");
+                    } else {
+                        database.child(eventKey).child("volunteers").child(ActiveUser.getUser()
+                                .getUid()).setValue(new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(),
+                                ActiveUser.getUser().getPhotoUrl().toString(), ActiveUser.getUser().getUid()));
+                        showModal("Thankyou for join this event :)");
+                        removeJoin();
+                    }
+                }
+            });
+
+
         }
+    }
+
+    private void showModal(String str){
+        modalText.setText(str);
         modal.showAtLocation(findViewById(R.id.rel), Gravity.CENTER, 0, 0);
         new Handler().postDelayed(new Runnable() {
             @Override
