@@ -94,13 +94,13 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
                             if (task.isSuccessful()) {
                                 ActiveUser.setUser(FirebaseAuth.getInstance().getCurrentUser());
                                 String uid = ActiveUser.getUser().getUid();
-                                User user = new User(ActiveUser.getUser().getDisplayName(),ActiveUser.getUser().getEmail(), Config.TEMP_PHOTO);
+                                User user = new User(ActiveUser.getUser().getDisplayName(),
+                                        ActiveUser.getUser().getEmail(), Config.TEMP_PHOTO, uid);
                                 userDatabase.child(uid).setValue(user);
                                 moveToHome();
                             }
                         }
                     });
-
         } else {
             Toast.makeText(RegisterActivity.this, task.getException().getMessage().toString(),
                     Toast.LENGTH_SHORT).show();

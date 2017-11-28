@@ -36,6 +36,9 @@ import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class EventDetailActivity extends MasterActivity implements ValueEventListener, OnMapReadyCallback, View.OnClickListener {
 
@@ -53,6 +56,7 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
     VolunteerAdapter adapter;
 
     PopupWindow modal;
+    ArrayList<User> volunteers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +120,8 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
         mapFragment.getMapAsync(this);
 
         if(event.getVolunteers()!=null){
-            adapter = new VolunteerAdapter(getApplicationContext(), event.getVolunteers());
+            volunteers = new ArrayList<User>(event.getVolunteers().values());
+            adapter = new VolunteerAdapter(getApplicationContext(), volunteers);
             listViewVolunteer.removeAllViews();
 
             for(int i=0; i<adapter.getCount(); i++){
@@ -170,7 +175,8 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
     }
 
     private boolean isJoined(){
-        for(User x : event.getVolunteers())
+        if(volunteers==null) return false;
+        for(User x : volunteers)
             if(x.getEmail().equals(ActiveUser.getUser().getEmail()))  return true;
         return false;
     }

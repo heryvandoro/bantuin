@@ -4,16 +4,17 @@ public class User {
     String name;
     String email;
     String photo;
-
+    String uid; //ini key untuk user
 
     public User(){
 
     }
 
-    public User(String name, String email, String photo ){
+    public User(String name, String email, String photo, String uid ){
         this.name = name;
         this.email = email;
         this.photo = photo;
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -38,5 +39,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

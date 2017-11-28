@@ -80,8 +80,7 @@ public class HomeFragment extends Fragment implements ValueEventListener, Adapte
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(this.getContext(), CategoryDetailActivity.class);
-        intent.putExtra("category_name",categories.get(i).getName());
-        intent.putExtra("category_position",Long.toString(i));
+        intent.putExtra("key",categories.get(i).getKey());
         startActivity(intent);
     }
 }

@@ -28,6 +28,7 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
     DatabaseReference eventDatabase;
     ArrayList<Event> events;
     ListView listView;
+    String categoryKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +40,17 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
 
     @Override
     public void initializeComponent() {
+        categoryKey = getIntent().getStringExtra("key");
+
+        //load category name here
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(getIntent().getStringExtra("category_name"));
+        actionBar.setTitle("Category");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         layoutManager = new LinearLayoutManager(this);
         events = new ArrayList<>();
         adapter = new EventAdapter(events,this);
-        eventDatabase = FirebaseDatabase.getInstance().getReference();
-        eventDatabase = eventDatabase.child("events");
+        eventDatabase = FirebaseDatabase.getInstance().getReference().child("events");
 
         listView = findViewById(R.id.list_view);
         eventDatabase.addListenerForSingleValueEvent(this);
@@ -58,7 +61,7 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(this, EventDetailActivity.class);
-        //EventDetailActivity.event = events.get(i);
+        intent.putExtra("key", events.get(i).getKey());
         startActivity(intent);
     }
 
@@ -66,7 +69,7 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
     public void onDataChange(DataSnapshot dataSnapshot) {
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
             Event event = postSnapshot.getValue(Event.class);
-            if(event.getCategory().toString().equals(getIntent().getStringExtra("category_position"))) {
+            if(event.getCategory().getKey().equals(categoryKey)) {
                 events.add(event);
                 adapter.notifyDataSetChanged();
             }

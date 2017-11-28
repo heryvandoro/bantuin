@@ -4,6 +4,7 @@ public class Category {
     String description;
     String icon;
     String name;
+    String key;
 
     public Category(){
 
@@ -38,5 +39,13 @@ public class Category {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

@@ -1,5 +1,6 @@
 package net.slc.hoga.bantuin.Model;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Event {
@@ -14,7 +15,7 @@ public class Event {
     private String time;
     private List<String> pictures;
     private Category category;
-    private List<User> volunteers;
+    private HashMap<String, User> volunteers;
 
     public Event() {
 
@@ -100,11 +101,11 @@ public class Event {
         this.pictures = pictures;
     }
 
-    public List<User> getVolunteers() {
+    public HashMap<String, User> getVolunteers() {
         return volunteers;
     }
 
-    public void setVolunteers(List<User> volunteers) {
+    public void setVolunteers(HashMap<String, User> volunteers) {
         this.volunteers = volunteers;
     }
 
