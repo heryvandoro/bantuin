@@ -2,16 +2,22 @@ package net.slc.hoga.bantuin;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Adapter.VolunteerAdapter;
+import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
 
@@ -37,7 +44,7 @@ import java.util.List;
 public class EventDetailActivity extends MasterActivity implements ValueEventListener, OnMapReadyCallback, View.OnClickListener {
 
     ImageView imageView;
-    TextView category, user, location;
+    TextView category, user, location, modalText;
     Button btnJoin;
 
     DatabaseReference database;
@@ -49,6 +56,8 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
     LinearLayout listViewVolunteer;
     List<User> listVolunteer;
     VolunteerAdapter adapter;
+
+    PopupWindow modal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,13 +142,15 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     String uid = postSnapshot.getValue(String.class);
-                    //Log.w("uid", uid);
+                    listViewVolunteer.removeAllViews();
+                    listVolunteer.clear();
                     database.child("users").child(uid).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             listVolunteer.add(dataSnapshot.getValue(User.class));
                             listViewVolunteer.addView(adapter.getView(adapter.getCount()-1,null,listViewVolunteer));
                             adapter.notifyDataSetChanged();
+                            dataSnapshot.getRef().removeEventListener(this);
                         }
                         @Override
                         public void onCancelled(DatabaseError databaseError) {}
@@ -158,6 +169,8 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        initializeModal();
     }
 
     SpannableString makeString(String boldText, String normalText) {
@@ -184,7 +197,44 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
         }
     }
 
-    private void joinEvent() {
+    private void initializeModal(){
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.popup_layout,null);
+        modal = new PopupWindow(
+                customView,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
 
+        ImageButton closeButton = customView.findViewById(R.id.modalClose);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modal.dismiss();
+            }
+        });
+
+        modalText = customView.findViewById(R.id.modalText);
+    }
+
+    private boolean isJoined(){
+        for(User x : listVolunteer)
+            if(x.getEmail().equals(ActiveUser.getUser().getEmail()))  return true;
+        return false;
+    }
+
+    private void joinEvent() {
+        if(isJoined())
+            modalText.setText("Event already joined!");
+        else
+            modalText.setText("Thankyou for join this event :)");
+        modal.showAtLocation(findViewById(R.id.rel), Gravity.CENTER, 0, 0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                modal.dismiss();
+            }
+        }, 2000);
     }
 }
