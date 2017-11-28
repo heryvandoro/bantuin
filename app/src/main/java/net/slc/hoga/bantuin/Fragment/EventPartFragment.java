@@ -23,14 +23,14 @@ import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class EventPartFragment extends Fragment implements ValueEventListener, AdapterView.OnItemClickListener {
+public class EventPartFragment extends Fragment implements AdapterView.OnItemClickListener {
     RecyclerView.LayoutManager layoutManager;
-    EventAdapter adapter;
-
-    DatabaseReference eventDatabase;
-    ArrayList<Event> events;
+    public EventAdapter adapter;
+    public ArrayList<Event> events = new ArrayList<>();
     ListView listView;
+
     public EventPartFragment() {
         // Required empty public constructor
     }
@@ -46,7 +46,6 @@ public class EventPartFragment extends Fragment implements ValueEventListener, A
         View v = inflater.inflate(R.layout.fragment_discover, container, false);
         initializeComponents();
         listView = v.findViewById(R.id.list_view);
-        eventDatabase.addListenerForSingleValueEvent(this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
         return v;
@@ -54,24 +53,7 @@ public class EventPartFragment extends Fragment implements ValueEventListener, A
 
     private void initializeComponents(){
         layoutManager = new LinearLayoutManager(getContext());
-        events = new ArrayList<>();
         adapter = new EventAdapter(events,getContext());
-        eventDatabase = FirebaseDatabase.getInstance().getReference();
-        eventDatabase = eventDatabase.child("events");
-    }
-
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-            Event event = postSnapshot.getValue(Event.class);
-            events.add(event);
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
     }
 
     @Override

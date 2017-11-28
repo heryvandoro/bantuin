@@ -73,6 +73,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         category = findViewById(R.id.category);
         user = findViewById(R.id.user);
         location = findViewById(R.id.loctime);
+
         database.addValueEventListener(new CustomFirebaseListener() {
            @Override
            public void onDataChange(DataSnapshot dataSnapshot) {

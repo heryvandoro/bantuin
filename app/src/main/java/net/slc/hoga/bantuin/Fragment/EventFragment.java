@@ -21,6 +21,7 @@ import net.slc.hoga.bantuin.Helper.Config;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Event;
+import net.slc.hoga.bantuin.Model.User;
 import net.slc.hoga.bantuin.R;
 
 import java.lang.reflect.Array;
@@ -28,13 +29,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class EventFragment extends Fragment {
     DatabaseReference database;
-    ArrayList<Event> myEvents;
-    ArrayList<Event> upcoming;
-    ArrayList<Event> history;
+
+    EventPartFragment partMyevents;
+    EventPartFragment partUpcoming;
+    EventPartFragment partHistory;
+    ArrayList<String> showed = new ArrayList<>();
 
     public EventFragment() {
         // Required empty public constructor
@@ -43,18 +47,22 @@ public class EventFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeComponents();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event, container, false);
+        initializeComponents();
+
+        partMyevents = new EventPartFragment();
+        partUpcoming = new EventPartFragment();
+        partHistory = new EventPartFragment();
 
         TabAdapter adapter = new TabAdapter(getFragmentManager());
-        adapter.addFragment(new EventPartFragment(), "My Events");
-        adapter.addFragment(new EventPartFragment(), "Upcoming");
-        adapter.addFragment(new EventPartFragment(), "History");
+        adapter.addFragment(partMyevents, "My Events");
+        adapter.addFragment(partUpcoming, "Upcoming");
+        adapter.addFragment(partHistory, "History");
 
         ViewPager viewPager = view.findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
@@ -71,19 +79,35 @@ public class EventFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Event event = postSnapshot.getValue(Event.class);
+                    if(showed.contains(event.getKey())) continue;
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat(Config.DATE_FORMAT, Locale.US);
                         Date d1, d2;
 
                         if (event.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
-                            myEvents.add(event);
+                            partMyevents.events.add(event);
+                            partMyevents.adapter.notifyDataSetChanged();
+                            showed.add(event.getKey());
                         }
 
-                        if (event.getVolunteers().get(ActiveUser.getUser().getUid()) != null) {
-                            d1 = sdf.parse(event.getDate());
-                            d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
-                            //if(d1.compareTo(d2)>0)
+                        ArrayList<User> volun = new ArrayList<>(event.getVolunteers().values());
+
+                        for(User x : volun){
+                            if(x.getUid().equals(ActiveUser.getUser().getUid())){
+                                d1 = sdf.parse(event.getDate());
+                                d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
+                                if (d1.compareTo(d2) >= 0) {
+                                    partUpcoming.events.add(event);
+                                    partUpcoming.adapter.notifyDataSetChanged();
+                                } else if (d1.compareTo(d2) < 0) {
+                                    partHistory.events.add(event);
+                                    partHistory.adapter.notifyDataSetChanged();
+                                }
+                                showed.add(event.getKey());
+                                break;
+                            }
                         }
+
                     } catch (Exception e) {
                         Log.w("error", e.getMessage().toString());
                     }
