@@ -3,9 +3,13 @@ package net.slc.hoga.bantuin;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -13,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
+import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.User;
 
 public class UserDetailActivity extends MasterActivity implements View.OnClickListener {
@@ -42,10 +47,9 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
 
         UID = getIntent().getStringExtra("uid");
 
-        database = FirebaseDatabase.getInstance().getReference()
-                .child("users").child(UID);
+        database = FirebaseDatabase.getInstance().getReference();
 
-        database.addListenerForSingleValueEvent(new CustomFirebaseListener() {
+        database.child("users").child(UID).addListenerForSingleValueEvent(new CustomFirebaseListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User temp = dataSnapshot.getValue(User.class);
@@ -58,14 +62,39 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
             }
         });
 
+        database.child("friends").child(ActiveUser.getUser().getUid()).addListenerForSingleValueEvent(
+                new CustomFirebaseListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            //already friends
+                            if (postSnapshot.getKey().equals(UID)) {
+                                removeAdd();
+                                break;
+                            }
+                        }
+                    }
+                });
+
         btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnAdd){
+        if (view.getId() == R.id.btnAdd) {
+            database.child("friends")
+                    .child(ActiveUser.getUser().getUid())
+                    .child(UID).setValue(true);
+            Toast.makeText(this, "Successfully added as friends!", Toast.LENGTH_SHORT).show();
+            removeAdd();
+        }
+    }
 
+    private void removeAdd() {
+        ViewGroup layout = (ViewGroup) btnAdd.getParent();
+        if (null != layout) {
+            layout.removeView(btnAdd);
         }
     }
 }
