@@ -1,11 +1,13 @@
 package net.slc.hoga.bantuin.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,14 +18,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import net.slc.hoga.bantuin.Adapter.UserAdapter;
+import net.slc.hoga.bantuin.EventDetailActivity;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.User;
 import net.slc.hoga.bantuin.R;
+import net.slc.hoga.bantuin.UserDetailActivity;
 
 import java.util.ArrayList;
 
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends Fragment implements AdapterView.OnItemClickListener {
     ListView listView;
     DatabaseReference database;
     UserAdapter adapter;
@@ -78,6 +82,7 @@ public class FriendsFragment extends Fragment {
                     }
                 });
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
     }
 
     @Override
@@ -94,4 +99,10 @@ public class FriendsFragment extends Fragment {
         return temp;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent = new Intent(getContext(), UserDetailActivity.class);
+        intent.putExtra("uid", friends.get(i).getUid());
+        startActivity(intent);
+    }
 }

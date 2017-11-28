@@ -1,5 +1,6 @@
 package net.slc.hoga.bantuin;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -119,7 +121,10 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             listViewVolunteer.removeAllViews();
 
             for (int i = 0; i < adapter.getCount(); i++) {
-                listViewVolunteer.addView(adapter.getView(i, null, listViewVolunteer));
+                View temp = adapter.getView(i, null, listViewVolunteer);
+                listViewVolunteer.addView(temp);
+                temp.setTag(((User) adapter.getItem(i)).getUid());
+                temp.setOnClickListener(this);
                 if (((User) adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid()))
                     removeJoin();
             }
@@ -145,6 +150,11 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         switch (view.getId()) {
             case R.id.btnJoin:
                 joinEvent();
+                break;
+            case R.id.item_user:
+                Intent intent = new Intent(this, UserDetailActivity.class);
+                intent.putExtra("uid", view.getTag().toString());
+                startActivity(intent);
                 break;
         }
     }
@@ -175,7 +185,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     }
 
     private void joinEvent() {
-        if (isJoined()){
+        if (isJoined()) {
             modalText.setText("Event already joined!");
         } else {
             database.child("volunteers").child(ActiveUser.getUser()
