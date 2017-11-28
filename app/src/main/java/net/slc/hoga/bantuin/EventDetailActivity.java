@@ -24,10 +24,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Adapter.VolunteerAdapter;
@@ -37,10 +35,9 @@ import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class EventDetailActivity extends MasterActivity implements ValueEventListener, OnMapReadyCallback, View.OnClickListener {
+public class EventDetailActivity extends MasterActivity implements OnMapReadyCallback, View.OnClickListener {
 
     ImageView imageView;
     TextView category, user, location, modalText;
@@ -89,16 +86,6 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
 
         listViewVolunteer = findViewById(R.id.listVolunteer);
         initializeModal();
-    }
-
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
     }
 
     private void loadContent() {
