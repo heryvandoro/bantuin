@@ -64,7 +64,6 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-
             Event event = postSnapshot.getValue(Event.class);
             events.add(event);
             adapter.notifyDataSetChanged();
@@ -79,7 +78,7 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(getContext(), EventDetailActivity.class);
-        EventDetailActivity.event = events.get(i);
+        intent.putExtra("key", events.get(i).getKey());
         startActivity(intent);
     }
 }

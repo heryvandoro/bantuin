@@ -3,6 +3,7 @@ package net.slc.hoga.bantuin.Model;
 import java.util.List;
 
 public class Event {
+    private String key;
     private String title;
     private String description;
     private Long lat;
@@ -13,6 +14,7 @@ public class Event {
     private String time;
     private List<String> pictures;
     private Long category;
+    private List<String> volunteers;
 
     public Event() {
 
@@ -96,5 +98,21 @@ public class Event {
 
     public void setPictures(List<String> pictures) {
         this.pictures = pictures;
+    }
+
+    public List<String> getVolunteers() {
+        return volunteers;
+    }
+
+    public void setVolunteers(List<String> volunteers) {
+        this.volunteers = volunteers;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

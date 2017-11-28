@@ -58,7 +58,7 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(this, EventDetailActivity.class);
-        EventDetailActivity.event = events.get(i);
+        //EventDetailActivity.event = events.get(i);
         startActivity(intent);
     }
 
