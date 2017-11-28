@@ -121,6 +121,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             listViewVolunteer.removeAllViews();
 
             for (int i = 0; i < adapter.getCount(); i++) {
+                if(((User) adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid())) continue;
                 View temp = adapter.getView(i, null, listViewVolunteer);
                 listViewVolunteer.addView(temp);
                 temp.setTag(((User) adapter.getItem(i)).getUid());
