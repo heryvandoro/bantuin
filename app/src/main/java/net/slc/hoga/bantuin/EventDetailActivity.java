@@ -107,7 +107,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
 
         if(event.getVolunteers()!=null){
-            volunteers = new ArrayList<User>(event.getVolunteers().values());
+            volunteers = new ArrayList<>(event.getVolunteers().values());
             adapter = new VolunteerAdapter(getApplicationContext(), volunteers);
             listViewVolunteer.removeAllViews();
 

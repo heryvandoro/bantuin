@@ -211,6 +211,7 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
                     tempUser = new User(ActiveUser.getUser().getDisplayName(),
                             ActiveUser.getUser().getEmail(),
                             ActiveUser.getUser().getPhotoUrl().toString(), uid);
+
                     userDatabase.child(uid).setValue(tempUser);
                 }
                 moveToHome();
