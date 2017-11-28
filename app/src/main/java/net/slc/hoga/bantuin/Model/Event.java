@@ -9,22 +9,22 @@ public class Event {
     private Long lat;
     private Long lng;
     private String location;
-    private String organizer;
+    private User organizer;
     private String date;
     private String time;
     private List<String> pictures;
-    private Long category;
-    private List<String> volunteers;
+    private Category category;
+    private List<User> volunteers;
 
     public Event() {
 
     }
 
-    public Long getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Long category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -68,11 +68,11 @@ public class Event {
         this.location = location;
     }
 
-    public String getOrganizer() {
+    public User getOrganizer() {
         return organizer;
     }
 
-    public void setOrganizer(String organizer) {
+    public void setOrganizer(User organizer) {
         this.organizer = organizer;
     }
 
@@ -100,11 +100,11 @@ public class Event {
         this.pictures = pictures;
     }
 
-    public List<String> getVolunteers() {
+    public List<User> getVolunteers() {
         return volunteers;
     }
 
-    public void setVolunteers(List<String> volunteers) {
+    public void setVolunteers(List<User> volunteers) {
         this.volunteers = volunteers;
     }
 

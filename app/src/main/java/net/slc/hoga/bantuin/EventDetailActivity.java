@@ -3,12 +3,10 @@ package net.slc.hoga.bantuin;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,12 +31,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Adapter.VolunteerAdapter;
+import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class EventDetailActivity extends MasterActivity implements ValueEventListener, OnMapReadyCallback, View.OnClickListener {
 
@@ -54,7 +50,6 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
     Event event;
 
     LinearLayout listViewVolunteer;
-    List<User> listVolunteer;
     VolunteerAdapter adapter;
 
     PopupWindow modal;
@@ -70,33 +65,26 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
     @Override
     public void initializeComponent() {
         eventKey = getIntent().getStringExtra("key");
+        database = FirebaseDatabase.getInstance().getReference()
+                .child("events").child(eventKey);
 
         imageView = findViewById(R.id.imageView);
         category = findViewById(R.id.category);
         user = findViewById(R.id.user);
         location = findViewById(R.id.loctime);
-
-        database = FirebaseDatabase.getInstance().getReference();
-        database.child("events").child(eventKey).addListenerForSingleValueEvent(new ValueEventListener() {
-             @Override
-             public void onDataChange(DataSnapshot dataSnapshot) {
-                 event = dataSnapshot.getValue(Event.class);
-                 loadContent();
-             }
-
-             @Override
-             public void onCancelled(DatabaseError databaseError) {
-
-             }
-         }
-        );
+        database.addValueEventListener(new CustomFirebaseListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
+               event = dataSnapshot.getValue(Event.class);
+               loadContent();
+           }
+        });
 
         btnJoin = findViewById(R.id.btnJoin);
         btnJoin.setOnClickListener(this);
 
-        listVolunteer = new ArrayList<>();
-        adapter = new VolunteerAdapter(getApplicationContext(), listVolunteer);
         listViewVolunteer = findViewById(R.id.listVolunteer);
+        initializeModal();
     }
 
     @Override
@@ -113,54 +101,11 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(event.getTitle());
+
         location.setText(makeString("", event.getTime() + " at " + event.getLocation()));
+        user.setText(makeString("", event.getOrganizer().getName()));
 
-        database.child("users").child(event.getOrganizer()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                user.setText(makeString("", dataSnapshot.getValue(String.class)));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        database.child("categories").child(event.getCategory().toString()).child("name").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                category.setText(makeString(dataSnapshot.getValue(String.class), ""));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        database.child("events").child(eventKey).child("volunteers").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                    String uid = postSnapshot.getValue(String.class);
-                    listViewVolunteer.removeAllViews();
-                    listVolunteer.clear();
-                    database.child("users").child(uid).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            listVolunteer.add(dataSnapshot.getValue(User.class));
-                            listViewVolunteer.addView(adapter.getView(adapter.getCount()-1,null,listViewVolunteer));
-                            adapter.notifyDataSetChanged();
-                            dataSnapshot.getRef().removeEventListener(this);
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {}
-                    });
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        }
-        );
+        category.setText(makeString(event.getCategory().getName(), ""));
 
         Picasso.with(this)
                 .load(event.getPictures().get(0)).placeholder(getResources().getDrawable(R.drawable.load_event))
@@ -170,11 +115,17 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        initializeModal();
+        if(event.getVolunteers()!=null){
+            adapter = new VolunteerAdapter(getApplicationContext(), event.getVolunteers());
+            listViewVolunteer.removeAllViews();
+
+            for(int i=0; i<adapter.getCount(); i++){
+                listViewVolunteer.addView(adapter.getView(i,null,listViewVolunteer));
+            }
+        }
     }
 
     SpannableString makeString(String boldText, String normalText) {
-
         SpannableString str = new SpannableString(boldText + normalText);
         str.setSpan(new StyleSpan(Typeface.BOLD), 0, boldText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return str;
@@ -219,7 +170,7 @@ public class EventDetailActivity extends MasterActivity implements ValueEventLis
     }
 
     private boolean isJoined(){
-        for(User x : listVolunteer)
+        for(User x : event.getVolunteers())
             if(x.getEmail().equals(ActiveUser.getUser().getEmail()))  return true;
         return false;
     }
