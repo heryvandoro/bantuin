@@ -2,6 +2,7 @@ package net.slc.hoga.bantuin;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,12 +15,13 @@ import com.squareup.picasso.Picasso;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Model.User;
 
-public class UserDetailActivity extends MasterActivity {
+public class UserDetailActivity extends MasterActivity implements View.OnClickListener {
 
     ImageView userPhoto;
     TextView userName, userEmail;
     DatabaseReference database;
     String UID;
+    Button btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,5 +57,15 @@ public class UserDetailActivity extends MasterActivity {
                 actionBar.setTitle(temp.getName());
             }
         });
+
+        btnAdd = findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.btnAdd){
+
+        }
     }
 }

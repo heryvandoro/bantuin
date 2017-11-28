@@ -49,8 +49,7 @@ public class FriendsFragment extends Fragment implements AdapterView.OnItemClick
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        String uid = dataSnapshot.getValue(String.class);
-                        Log.w("cobaacc", uid);
+                        String uid = dataSnapshot.getKey();
                         database.child("users").child(uid).addListenerForSingleValueEvent(new CustomFirebaseListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
