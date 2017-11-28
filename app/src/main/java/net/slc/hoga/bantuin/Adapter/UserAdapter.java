@@ -15,23 +15,23 @@ import net.slc.hoga.bantuin.R;
 
 import java.util.List;
 
-public class VolunteerAdapter extends BaseAdapter{
-    List<User> listVolunteers;
+public class UserAdapter extends BaseAdapter {
+    List<User> listUser;
     Context context;
 
-    public VolunteerAdapter(Context context, List<User> listVolunteers) {
+    public UserAdapter(Context context, List<User> listUser) {
         this.context = context;
-        this.listVolunteers = listVolunteers;
+        this.listUser = listUser;
     }
 
     @Override
     public int getCount() {
-        return listVolunteers.size();
+        return listUser.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return listVolunteers.get(i);
+        return listUser.get(i);
     }
 
     @Override
@@ -41,11 +41,11 @@ public class VolunteerAdapter extends BaseAdapter{
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_volunteer, null);
-        ((TextView)v.findViewById(R.id.volunteerName)).setText(listVolunteers.get(i).getName());
+        View v = LayoutInflater.from(context).inflate(R.layout.item_user, null);
+        ((TextView) v.findViewById(R.id.userName)).setText(listUser.get(i).getName());
         Picasso.with(context)
-                .load(listVolunteers.get(i).getPhoto())
-                .into((ImageView) v.findViewById(R.id.volunteerPhoto));
+                .load(listUser.get(i).getPhoto())
+                .into((ImageView) v.findViewById(R.id.userPhoto));
         return v;
     }
 }

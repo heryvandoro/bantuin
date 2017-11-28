@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,7 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import net.slc.hoga.bantuin.Adapter.VolunteerAdapter;
+import net.slc.hoga.bantuin.Adapter.UserAdapter;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Event;
@@ -53,7 +52,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     Event event;
 
     LinearLayout listViewVolunteer;
-    VolunteerAdapter adapter;
+    UserAdapter adapter;
 
     PopupWindow modal;
     ArrayList<User> volunteers;
@@ -116,7 +115,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
 
         if (event.getVolunteers() != null) {
             volunteers = new ArrayList<>(event.getVolunteers().values());
-            adapter = new VolunteerAdapter(getApplicationContext(), volunteers);
+            adapter = new UserAdapter(getApplicationContext(), volunteers);
             listViewVolunteer.removeAllViews();
 
             for (int i = 0; i < adapter.getCount(); i++) {
