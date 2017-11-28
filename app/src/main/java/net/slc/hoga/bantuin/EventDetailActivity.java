@@ -10,11 +10,14 @@ import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -75,11 +78,11 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         location = findViewById(R.id.loctime);
 
         database.addValueEventListener(new CustomFirebaseListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-               event = dataSnapshot.getValue(Event.class);
-               loadContent();
-           }
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                event = dataSnapshot.getValue(Event.class);
+                loadContent();
+            }
         });
 
         btnJoin = findViewById(R.id.btnJoin);
@@ -107,13 +110,18 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        if(event.getVolunteers()!=null){
+        if (event.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
+            removeJoin();
+        }
+
+        if (event.getVolunteers() != null) {
             volunteers = new ArrayList<>(event.getVolunteers().values());
             adapter = new VolunteerAdapter(getApplicationContext(), volunteers);
             listViewVolunteer.removeAllViews();
 
-            for(int i=0; i<adapter.getCount(); i++){
-                listViewVolunteer.addView(adapter.getView(i,null,listViewVolunteer));
+            for (int i = 0; i < adapter.getCount(); i++) {
+                listViewVolunteer.addView(adapter.getView(i, null, listViewVolunteer));
+                if(((User)adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid())) removeJoin();
             }
         }
     }
@@ -141,9 +149,9 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         }
     }
 
-    private void initializeModal(){
+    private void initializeModal() {
         LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.popup_layout,null);
+        View customView = inflater.inflate(R.layout.popup_layout, null);
         modal = new PopupWindow(
                 customView,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -162,15 +170,15 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         modalText = customView.findViewById(R.id.modalText);
     }
 
-    private boolean isJoined(){
-        if(volunteers==null) return false;
-        for(User x : volunteers)
-            if(x.getEmail().equals(ActiveUser.getUser().getEmail()))  return true;
+    private boolean isJoined() {
+        if (volunteers == null) return false;
+        for (User x : volunteers)
+            if (x.getEmail().equals(ActiveUser.getUser().getEmail())) return true;
         return false;
     }
 
     private void joinEvent() {
-        if(isJoined())
+        if (isJoined())
             modalText.setText("Event already joined!");
         else
             modalText.setText("Thankyou for join this event :)");
@@ -181,5 +189,18 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                 modal.dismiss();
             }
         }, 2000);
+    }
+
+    private void removeJoin(){
+        ViewGroup layout = (ViewGroup) btnJoin.getParent();
+        if (null != layout) {
+            layout.removeView(btnJoin);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+            );
+            params.setMargins(0, 0, 0, 10);
+            layout.findViewById(R.id.scrollDetail).setLayoutParams(params);
+        }
     }
 }
