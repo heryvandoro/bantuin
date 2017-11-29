@@ -27,6 +27,16 @@
         android:layout_marginTop="5dp"
         android:gravity="center" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/listEvent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical" />
+
     <Button
         android:id="@+id/btnAdd"
         style="@style/Button"

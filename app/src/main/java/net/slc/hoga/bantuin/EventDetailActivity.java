@@ -225,8 +225,6 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                     }
                 }
             });
-
-
         }
     }
 
