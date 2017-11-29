@@ -2,15 +2,26 @@ package net.slc.hoga.bantuin;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,12 +34,13 @@ import net.slc.hoga.bantuin.Model.Category;
 
 import java.util.Calendar;
 
-public class AddEventActivity extends MasterActivity implements ValueEventListener, View.OnClickListener {
+public class AddEventActivity extends AppCompatActivity implements ValueEventListener, View.OnClickListener, PlaceSelectionListener{
     Spinner spinnerCategories;
     ArrayAdapter<String> adapter;
     DatabaseReference database;
     EditText textDate, textTime;
     Calendar calendar;
+    PlaceAutocompleteFragment autocompleteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +50,10 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
         initializeComponent();
     }
 
-    @Override
+
     public void initializeComponent() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(actionBar.getTitle() + " - Add Event");
+        actionBar.setTitle("Add Event");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         database = FirebaseDatabase.getInstance().getReference().child("categories");
@@ -57,6 +69,18 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
 
         textTime = findViewById(R.id.textTime);
         textTime.setOnClickListener(this);
+
+        autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.placeFragment);
+
+        AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(Place.TYPE_COUNTRY)
+                .setCountry("ID")
+                .build();
+        autocompleteFragment.setOnPlaceSelectedListener(this);
+        autocompleteFragment.setFilter(autocompleteFilter);
+
+
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -103,5 +127,16 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
             }, hour, minute, true);
             mTimePicker.show();
         }
+    }
+
+    @Override
+    public void onPlaceSelected(Place place) {
+        //place.getLatLng();
+        Toast.makeText(this, "Loc: "+place.getAddress(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onError(Status status) {
+
     }
 }
