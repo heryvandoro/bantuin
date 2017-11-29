@@ -1,6 +1,8 @@
 package net.slc.hoga.bantuin.Fragment;
 
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import net.slc.hoga.bantuin.Adapter.EventAdapter;
 import net.slc.hoga.bantuin.EventDetailActivity;
+import net.slc.hoga.bantuin.Helper.GPSTracker;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
 
@@ -54,6 +58,13 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     }
 
     private void initializeComponents(){
+        GPSTracker gps = new GPSTracker(getContext());
+        if(!gps.canGetLocation()){
+            gps.showSettingsAlert();
+        }else
+        {
+            Toast.makeText(getContext(), "Lat: "+gps.getLatitude() + "| Lng: "+gps.getLongitude(), Toast.LENGTH_SHORT).show();
+        }
         layoutManager = new LinearLayoutManager(getContext());
         events = new ArrayList<>();
         adapter = new EventAdapter(events,getContext());
