@@ -16,6 +16,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import net.slc.hoga.bantuin.Adapter.EventAdapter;
+import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
+import net.slc.hoga.bantuin.Model.Category;
 import net.slc.hoga.bantuin.Model.Event;
 
 import java.util.ArrayList;
@@ -25,10 +27,11 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
     RecyclerView.LayoutManager layoutManager;
     EventAdapter adapter;
 
-    DatabaseReference eventDatabase;
+    DatabaseReference database;
     ArrayList<Event> events;
     ListView listView;
     String categoryKey;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +44,23 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
     @Override
     public void initializeComponent() {
         categoryKey = getIntent().getStringExtra("key");
-
-        //load category name here
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Category");
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         layoutManager = new LinearLayoutManager(this);
         events = new ArrayList<>();
         adapter = new EventAdapter(events,this);
-        eventDatabase = FirebaseDatabase.getInstance().getReference().child("events");
+        database = FirebaseDatabase.getInstance().getReference();
 
         listView = findViewById(R.id.list_view);
-        eventDatabase.addListenerForSingleValueEvent(this);
+        database.child("events").addListenerForSingleValueEvent(this);
+        database.child("categories").child(categoryKey).addListenerForSingleValueEvent(new CustomFirebaseListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Category temp = dataSnapshot.getValue(Category.class);
+                actionBar.setTitle(temp.getName());
+            }
+        });
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
     }
