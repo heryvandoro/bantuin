@@ -1,5 +1,6 @@
 package net.slc.hoga.bantuin.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ahmadrosid.svgloader.SvgLoader;
 import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Model.Category;
@@ -42,10 +44,11 @@ public class CategoryAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View temp = LayoutInflater.from(context).inflate(R.layout.card_category, null);
         ((TextView)temp.findViewById(R.id.categoryName)).setText(categories.get(i).getName());
-        Picasso.with(context)
-                .load(categories.get(i).getIcon())
-                .resize(100, 100)
-                .into((ImageView) temp.findViewById(R.id.categoryIcon));
+
+        SvgLoader.pluck()
+                .with((Activity) context)
+                .setPlaceHolder(R.mipmap.ic_launcher, R.mipmap.ic_launcher)
+                .load(categories.get(i).getIcon(), (ImageView) temp.findViewById(R.id.categoryIcon));
         return temp;
     }
 }
