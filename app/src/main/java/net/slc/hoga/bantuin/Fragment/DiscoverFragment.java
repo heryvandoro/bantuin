@@ -75,6 +75,7 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
         layoutManager = new LinearLayoutManager(getContext());
         events = new ArrayList<>();
         adapter = new EventAdapter(events, getContext());
+        adapter.setCurrentLatLng(gps.getLocation());
         eventDatabase = FirebaseDatabase.getInstance().getReference();
         eventDatabase = eventDatabase.child("events");
     }

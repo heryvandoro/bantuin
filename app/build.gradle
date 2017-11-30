@@ -42,20 +42,7 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:11.6.0'
     compile 'com.android.support:animated-vector-drawable:26.1.0'
     compile 'com.android.support:customtabs:26.1.0'
+    compile 'com.github.ar-android:AndroidSvgLoader:1.0.0'
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 apply plugin: 'com.google.gms.google-services'
