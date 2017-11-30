@@ -5,4 +5,6 @@
     <color name="primaryDarkColor">#8e0000</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#c0c0c0</color>
+    <color name="dot_light_screen1">#008333</color>
+    <color name="dot_dark_screen1">#000</color>
 </resources>
