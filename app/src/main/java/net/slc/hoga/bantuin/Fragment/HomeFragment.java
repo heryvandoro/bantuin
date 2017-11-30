@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import net.slc.hoga.bantuin.Adapter.CategoryAdapter;
 import net.slc.hoga.bantuin.Adapter.SliderAdapter;
 import net.slc.hoga.bantuin.CategoryDetailActivity;
+import net.slc.hoga.bantuin.Helper.CustomGridView;
 import net.slc.hoga.bantuin.Model.Category;
 import net.slc.hoga.bantuin.R;
 
@@ -35,9 +36,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class HomeFragment extends Fragment implements ValueEventListener, AdapterView.OnItemClickListener, ViewPager.OnPageChangeListener{
+public class HomeFragment extends Fragment implements ValueEventListener, AdapterView.OnItemClickListener, ViewPager.OnPageChangeListener {
 
-    GridView gridView;
+    CustomGridView gridView;
     RecyclerView.LayoutManager layoutManager;
     CategoryAdapter adapter;
 
@@ -96,27 +97,27 @@ public class HomeFragment extends Fragment implements ValueEventListener, Adapte
         categoryDatabase.addListenerForSingleValueEvent(this);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(this);
-        addBottomDots(viewPager.getCurrentItem());
+
+        initDots();
+        setActiveDots(0);
         return v;
     }
 
-    private void addBottomDots(int currentPage) {
+    private void initDots() {
         dots = new TextView[images.size()];
-
-        int colorsActive = getResources().getColor(R.color.dot_light_screen1);
-        int colorsInactive = getResources().getColor(R.color.dot_dark_screen1);
-
-        dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new TextView(getContext());
             dots[i].setText(Html.fromHtml("&#8226;"));
             dots[i].setTextSize(35);
-            dots[i].setTextColor(colorsInactive);
+            dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
             dotsLayout.addView(dots[i]);
         }
+    }
 
-        if (dots.length > 0)
-            dots[currentPage].setTextColor(colorsActive);
+    private void setActiveDots(int currentPage) {
+        for (int i = 0; i < dots.length; i++)
+            dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
+        dots[currentPage].setTextColor(getResources().getColor(R.color.dot_enabled));
     }
 
     private void initializeComponents() {
@@ -160,7 +161,7 @@ public class HomeFragment extends Fragment implements ValueEventListener, Adapte
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        addBottomDots(position);
+        setActiveDots(position);
     }
 
     @Override
