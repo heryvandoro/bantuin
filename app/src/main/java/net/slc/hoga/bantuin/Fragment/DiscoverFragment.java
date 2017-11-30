@@ -62,11 +62,6 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
 
     private void initializeComponents() {
         gps = new GPSTracker(getContext());
-        if (!gps.canGetLocation()) {
-            gps.showSettingsAlert();
-        } else {
-            //Toast.makeText(getContext(), "Lat: " + gps.getLatitude() + "| Lng: " + gps.getLongitude(), Toast.LENGTH_SHORT).show();
-        }
 
         loc1 = new Location("");
         loc2 = new Location("");

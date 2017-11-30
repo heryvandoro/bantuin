@@ -25,6 +25,7 @@ import net.slc.hoga.bantuin.Fragment.EventFragment;
 import net.slc.hoga.bantuin.Fragment.FriendsFragment;
 import net.slc.hoga.bantuin.Fragment.HomeFragment;
 import net.slc.hoga.bantuin.Helper.BottomNavigationViewHelper;
+import net.slc.hoga.bantuin.Helper.GPSTracker;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 
 public class HomeActivity extends MasterActivity implements
@@ -39,11 +40,13 @@ public class HomeActivity extends MasterActivity implements
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+    GPSTracker gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        gps = new GPSTracker(this);
         initializeComponent();
     }
 

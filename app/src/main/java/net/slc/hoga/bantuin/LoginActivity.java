@@ -1,8 +1,13 @@
 package net.slc.hoga.bantuin;
 
+import android.*;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,10 +64,38 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
         FacebookSdk.sdkInitialize(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    0);
+        }else{
+            nextProcess();
+        }
+        return;
+    }
+
+    private void nextProcess(){
         initializeComponent();
         checkAvailbility();
 
         if(ActiveUser.isLogged()) moveToHome();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 0: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    nextProcess();
+                } else {
+                    System.exit(0);
+                }
+                return;
+            }
+        }
     }
 
     @Override
