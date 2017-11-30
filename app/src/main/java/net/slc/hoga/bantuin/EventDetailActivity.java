@@ -96,7 +96,6 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     }
 
     private void loadContent() {
-        //Toast.makeText(this, event.getLat().toString(), Toast.LENGTH_SHORT).show();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(event.getTitle());
@@ -229,7 +228,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         }
     }
 
-    private void showModal(String str){
+    private void showModal(String str) {
         modalText.setText(str);
         modal.showAtLocation(findViewById(R.id.rel), Gravity.CENTER, 0, 0);
         new Handler().postDelayed(new Runnable() {
