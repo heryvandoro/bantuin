@@ -36,6 +36,9 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     DatabaseReference eventDatabase;
     ArrayList<Event> events;
     ListView listView;
+    Location loc1, loc2, loc3;
+    GPSTracker gps;
+
     public DiscoverFragment() {
         // Required empty public constructor
     }
@@ -57,38 +60,56 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
         return v;
     }
 
-    private void initializeComponents(){
-        GPSTracker gps = new GPSTracker(getContext());
-        if(!gps.canGetLocation()){
+    private void initializeComponents() {
+        gps = new GPSTracker(getContext());
+        if (!gps.canGetLocation()) {
             gps.showSettingsAlert();
-        }else
-        {
-            Toast.makeText(getContext(), "Lat: "+gps.getLatitude() + "| Lng: "+gps.getLongitude(), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Lat: " + gps.getLatitude() + "| Lng: " + gps.getLongitude(), Toast.LENGTH_SHORT).show();
         }
 
-//        Location loc1 = new Location("");
-//        loc1.setLatitude(lat1);
-//        loc1.setLongitude(lon1);
-//
-//        Location loc2 = new Location("");
-//        loc2.setLatitude(lat2);
-//        loc2.setLongitude(lon2);
-//
-//        float distanceInMeters = loc1.distanceTo(loc2);
+        loc1 = new Location("");
+        loc2 = new Location("");
+        loc3 = new Location("");
 
         layoutManager = new LinearLayoutManager(getContext());
         events = new ArrayList<>();
-        adapter = new EventAdapter(events,getContext());
+        adapter = new EventAdapter(events, getContext());
         eventDatabase = FirebaseDatabase.getInstance().getReference();
         eventDatabase = eventDatabase.child("events");
     }
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+            //loc1 current
+            //loc2 new event
+            //loc3 temp
             Event event = postSnapshot.getValue(Event.class);
-            events.add(event);
-            adapter.notifyDataSetChanged();
+            loc1.setLatitude(gps.getLatitude());
+            loc1.setLongitude(gps.getLongitude());
+
+            loc2.setLatitude(event.getLat());
+            loc2.setLongitude(event.getLng());
+            float distance = loc1.distanceTo(loc2);
+            boolean inserted = false;
+            for (int i = 0; i < adapter.getCount(); i++) {
+                Event temp = (Event) adapter.getItem(i);
+                loc3.setLongitude(temp.getLng());
+                loc3.setLatitude(temp.getLat());
+
+                if (loc1.distanceTo(loc3) > distance) {
+                    inserted = true;
+                    events.add(i, event);
+                    adapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+
+            if (!inserted) {
+                events.add(event);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 

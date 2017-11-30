@@ -96,6 +96,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     }
 
     private void loadContent() {
+        //Toast.makeText(this, event.getLat().toString(), Toast.LENGTH_SHORT).show();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(event.getTitle());
