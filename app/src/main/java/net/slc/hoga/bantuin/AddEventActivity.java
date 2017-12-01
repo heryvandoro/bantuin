@@ -3,14 +3,13 @@ package net.slc.hoga.bantuin;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -39,7 +38,9 @@ import net.slc.hoga.bantuin.Helper.ImageService;
 import net.slc.hoga.bantuin.Model.Category;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -154,10 +155,11 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
             }, hour, minute, true);
             mTimePicker.show();
         } else if (view.getId() == R.id.btnAddEvent) {
-            Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            photoPickerIntent.setType("image/*");
-            photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
-            startActivityForResult(Intent.createChooser(photoPickerIntent, "Complete Action Using"), 11);
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
+            startActivityForResult(Intent.createChooser(intent, "Bantuin - Event Images"), 1);
         }
     }
 
@@ -175,15 +177,21 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 11) {
-            if (resultCode == Activity.RESULT_OK) {
-                File file = new File(FilePath.getPath(this, data.getData()));
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            //two images
+            if (data.getClipData() != null) {
+                ClipData mClipData = data.getClipData();
 
-                MultipartBody.Part images =
-                MultipartBody.Part.createFormData("fileToUpload", file.getName(),
-                        RequestBody.create(MediaType.parse("image/*"), file));
+                List<MultipartBody.Part> parts = new ArrayList();
 
-                retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(images);
+                for (int i = 0; i < mClipData.getItemCount(); i++) {
+                    File file = new File(FilePath.getPath(this, mClipData.getItemAt(i).getUri()));
+                    MultipartBody.Part images =
+                            MultipartBody.Part.createFormData("fileToUpload[" + i + "]", file.getName(),
+                                    RequestBody.create(MediaType.parse("image/*"), file));
+                    parts.add(images);
+                }
+                retrofit2.Call<okhttp3.ResponseBody> req = service.postImage(parts);
                 req.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -195,6 +203,8 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
                         t.printStackTrace();
                     }
                 });
+            } else {
+                Toast.makeText(this, "Please select at least 2 images!", Toast.LENGTH_SHORT).show();
             }
         }
     }
