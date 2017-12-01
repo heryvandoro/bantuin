@@ -181,6 +181,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         }
 
         if (event.getVolunteers() != null) {
+            findViewById(R.id.labelVolunteers).setVisibility(View.VISIBLE);
             volunteers = new ArrayList<>(event.getVolunteers().values());
             adapter = new UserAdapter(getApplicationContext(), volunteers);
             listViewVolunteer.removeAllViews();
