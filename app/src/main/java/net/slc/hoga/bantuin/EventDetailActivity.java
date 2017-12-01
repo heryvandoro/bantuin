@@ -89,10 +89,11 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                 database.child("friends").addListenerForSingleValueEvent(new CustomFirebaseListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChild(ActiveUser.getUser().getUid())){
-                            for(DataSnapshot x : dataSnapshot.child(ActiveUser.getUser().getUid()).getChildren()){
+                        if (dataSnapshot.hasChild(ActiveUser.getUser().getUid())) {
+                            for (DataSnapshot x : dataSnapshot.child(ActiveUser.getUser().getUid()).getChildren()) {
                                 listFriends.add(x.getKey());
-                            };
+                            }
+                            ;
                         }
                         loadContent();
                     }
@@ -145,9 +146,10 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                 View temp = adapter.getView(i, null, listViewVolunteer);
                 temp.setTag(((User) adapter.getItem(i)).getUid());
                 temp.setOnClickListener(this);
-                if(listFriends.indexOf(tempVol.getUid())==-1){
+                if (listFriends.indexOf(tempVol.getUid()) == -1) {
                     listViewVolunteer.addView(temp);
-                }else{
+                } else {
+                    temp.findViewById(R.id.isFriend).setVisibility(View.VISIBLE);
                     listViewVolunteer.addView(temp, 0);
                 }
             }
