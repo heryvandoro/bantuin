@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,10 @@ import com.google.firebase.database.ValueEventListener;
 import net.slc.hoga.bantuin.Adapter.CategoryAdapter;
 import net.slc.hoga.bantuin.Adapter.SliderAdapter;
 import net.slc.hoga.bantuin.CategoryDetailActivity;
+import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Helper.CustomGridView;
 import net.slc.hoga.bantuin.Model.Category;
+import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
 
 import java.util.ArrayList;
@@ -36,13 +39,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class HomeFragment extends Fragment implements ValueEventListener, AdapterView.OnItemClickListener, ViewPager.OnPageChangeListener {
+public class HomeFragment extends Fragment implements AdapterView.OnItemClickListener, ViewPager.OnPageChangeListener {
 
     CustomGridView gridView;
     RecyclerView.LayoutManager layoutManager;
     CategoryAdapter adapter;
 
-    DatabaseReference categoryDatabase;
+    DatabaseReference database;
     ArrayList<Category> categories;
 
     ViewPager viewPager;
@@ -64,20 +67,6 @@ public class HomeFragment extends Fragment implements ValueEventListener, Adapte
     }
 
     @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-            Category category = postSnapshot.getValue(Category.class);
-            categories.add(category);
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
@@ -86,20 +75,10 @@ public class HomeFragment extends Fragment implements ValueEventListener, Adapte
         dotsLayout = v.findViewById(R.id.layoutDots);
 
         initializeComponents();
-        images.add("https://www.thelocal.de/userdata/images/article/fa6fd5014ccbd8f4392f716473ab6ff354f871505d9128820bbb0461cce1d645.jpg");
-        images.add("https://vignette.wikia.nocookie.net/wingsoffire/images/5/54/Panda.jpeg/revision/latest?cb=20170205005103");
-        images.add("http://www.thechinawatch.com/wp-content/uploads/2012/03/11113.jpg");
 
-        sliderAdapter = new SliderAdapter(images, getContext());
-        viewPager.setAdapter(sliderAdapter);
-        viewPager.addOnPageChangeListener(this);
-
-        categoryDatabase.addListenerForSingleValueEvent(this);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(this);
 
-        initDots();
-        setActiveDots(0);
         return v;
     }
 
@@ -117,7 +96,7 @@ public class HomeFragment extends Fragment implements ValueEventListener, Adapte
     private void setActiveDots(int currentPage) {
         for (int i = 0; i < dots.length; i++)
             dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
-        dots[currentPage].setTextColor(getResources().getColor(R.color.dot_enabled));
+            dots[currentPage].setTextColor(getResources().getColor(R.color.dot_enabled));
     }
 
     private void initializeComponents() {
@@ -125,9 +104,36 @@ public class HomeFragment extends Fragment implements ValueEventListener, Adapte
         layoutManager = new LinearLayoutManager(getContext());
         categories = new ArrayList<>();
         adapter = new CategoryAdapter(categories, getContext());
-        categoryDatabase = FirebaseDatabase.getInstance().getReference();
-        categoryDatabase = categoryDatabase.child("categories");
-        initHandler();
+        database = FirebaseDatabase.getInstance().getReference();
+        sliderAdapter = new SliderAdapter(images, getContext());
+        database.child("categories").addListenerForSingleValueEvent(new CustomFirebaseListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Category category = postSnapshot.getValue(Category.class);
+                    categories.add(category);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        database.child("slider").addListenerForSingleValueEvent(new CustomFirebaseListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String image = postSnapshot.getValue(String.class);
+                    images.add(image);
+                    sliderAdapter.notifyDataSetChanged();
+                }
+                Log.i("asdasd","Size: "+images.size());
+
+                viewPager.setAdapter(sliderAdapter);
+                viewPager.addOnPageChangeListener(HomeFragment.this);
+                initDots();
+                setActiveDots(0);
+                initHandler();
+            }
+        });
     }
 
     void initHandler() {
