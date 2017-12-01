@@ -5,12 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +21,7 @@ import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,10 +32,10 @@ import net.slc.hoga.bantuin.Helper.Config;
 import net.slc.hoga.bantuin.Helper.DateParser;
 import net.slc.hoga.bantuin.Helper.FilePath;
 import net.slc.hoga.bantuin.Helper.ImageService;
+import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Category;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import net.slc.hoga.bantuin.Model.Event;
+import net.slc.hoga.bantuin.Model.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,13 +57,15 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
     Spinner spinnerCategories;
     ArrayAdapter<String> adapter;
     DatabaseReference database;
-    EditText textDate, textTime;
+    EditText textDate, textTime, textTitle, textDescription;
     Calendar calendar;
     PlaceAutocompleteFragment autocompleteFragment;
     Button btnAdd;
+    Place place;
 
     ImageService service;
     List<String> pictures;
+    List<Category> allCat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +93,11 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
 
         textTime = findViewById(R.id.textTime);
         textTime.setOnClickListener(this);
+
+        textTitle = findViewById(R.id.textTitle);
+        textDescription = findViewById(R.id.textDescription);
+
+        allCat = new ArrayList<>();
 
         autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.placeFragment);
@@ -133,6 +137,7 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
     public void onDataChange(DataSnapshot dataSnapshot) {
         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
             Category category = postSnapshot.getValue(Category.class);
+            allCat.add(category);
             adapter.add(category.getName());
             adapter.notifyDataSetChanged();
         }
@@ -198,8 +203,9 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
                                 res = res.substring(5, res.length() - 2);
                                 String[] temp = res.split("#");
                                 for (String x : temp) {
-                                    pictures.add(x);
+                                    pictures.add(Config.BASE_URL_PICTURE + x);
                                 }
+                                saveEvent();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -219,11 +225,40 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
 
     @Override
     public void onPlaceSelected(Place place) {
-        Toast.makeText(this, "Loc: " + place.getAddress(), Toast.LENGTH_SHORT).show();
+        this.place = place;
+        //Toast.makeText(this, "Loc: " + place.getAddress(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onError(Status status) {
 
+    }
+
+    private void saveEvent() {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("events");
+        String key = db.push().getKey();
+
+        try {
+            Event event = new Event();
+            event.setCategory(allCat.get(spinnerCategories.getSelectedItemPosition()));
+            event.setDate(textDate.getText().toString());
+            event.setTime(textTime.getText().toString());
+            FirebaseUser tempUser = ActiveUser.getUser();
+            event.setOrganizer(new User(tempUser.getDisplayName(),
+                    tempUser.getEmail(), tempUser.getPhotoUrl().toString(),
+                    tempUser.getUid()));
+            event.setDescription(textDescription.getText().toString());
+            event.setTitle(textTitle.getText().toString());
+            event.setKey(key);
+            event.setLat(place.getLatLng().latitude);
+            event.setLng(place.getLatLng().longitude);
+            event.setLocation(place.getAddress().toString());
+            event.setPictures(pictures);
+            db.child(key).setValue(event);
+            Toast.makeText(this, "Success add event!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Something wrong!", Toast.LENGTH_SHORT).show();
+        }
+        super.onBackPressed();
     }
 }
