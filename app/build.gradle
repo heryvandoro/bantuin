@@ -43,6 +43,10 @@ dependencies {
     compile 'com.android.support:animated-vector-drawable:26.1.0'
     compile 'com.android.support:customtabs:26.1.0'
     compile 'com.github.ar-android:AndroidSvgLoader:1.0.0'
+
+    //upload image with retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
