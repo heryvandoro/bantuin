@@ -22,7 +22,7 @@ import net.slc.hoga.bantuin.Model.Event;
 
 import java.util.ArrayList;
 
-public class CategoryDetailActivity extends MasterActivity implements ValueEventListener, AdapterView.OnItemClickListener{
+public class CategoryDetailActivity extends MasterActivity implements ValueEventListener, AdapterView.OnItemClickListener {
 
     RecyclerView.LayoutManager layoutManager;
     EventAdapter adapter;
@@ -49,7 +49,7 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
 
         layoutManager = new LinearLayoutManager(this);
         events = new ArrayList<>();
-        adapter = new EventAdapter(events,this);
+        adapter = new EventAdapter(events, this);
         database = FirebaseDatabase.getInstance().getReference();
 
         listView = findViewById(R.id.list_view);
@@ -74,9 +74,10 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
             Event event = postSnapshot.getValue(Event.class);
-            if(event.getCategory().getKey().equals(categoryKey)) {
+            if (event.getCategory().getKey().equals(categoryKey)) {
+                findViewById(R.id.noData).setVisibility(View.GONE);
                 events.add(event);
                 adapter.notifyDataSetChanged();
             }
