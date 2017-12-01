@@ -80,6 +80,7 @@ public class EventFragment extends Fragment {
                         Date d1, d2;
 
                         if (event.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
+                            partMyevents.getView().findViewById(R.id.noData).setVisibility(View.GONE);
                             partMyevents.events.add(event);
                             partMyevents.adapter.notifyDataSetChanged();
                             showed.add(event.getKey());
@@ -92,9 +93,11 @@ public class EventFragment extends Fragment {
                                 d1 = sdf.parse(event.getDate());
                                 d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
                                 if (d1.compareTo(d2) >= 0) {
+                                    partUpcoming.getView().findViewById(R.id.noData).setVisibility(View.GONE);
                                     partUpcoming.events.add(event);
                                     partUpcoming.adapter.notifyDataSetChanged();
                                 } else if (d1.compareTo(d2) < 0) {
+                                    partHistory.getView().findViewById(R.id.noData).setVisibility(View.GONE);
                                     partHistory.events.add(event);
                                     partHistory.adapter.notifyDataSetChanged();
                                 }

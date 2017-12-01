@@ -10,7 +10,6 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,7 +30,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Adapter.SliderAdapter;
 import net.slc.hoga.bantuin.Adapter.UserAdapter;

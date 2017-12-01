@@ -3,13 +3,12 @@ package net.slc.hoga.bantuin.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import net.slc.hoga.bantuin.Adapter.UserAdapter;
-import net.slc.hoga.bantuin.EventDetailActivity;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.User;
@@ -32,6 +30,8 @@ public class FriendsFragment extends Fragment implements AdapterView.OnItemClick
     DatabaseReference database;
     UserAdapter adapter;
     ArrayList<User> friends;
+
+    FrameLayout layoutError;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -53,6 +53,9 @@ public class FriendsFragment extends Fragment implements AdapterView.OnItemClick
                         database.child("users").child(uid).addListenerForSingleValueEvent(new CustomFirebaseListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
+                                try{
+                                    ((ViewGroup) layoutError.getParent()).removeView(layoutError);
+                                }catch (Exception e){}
                                 User temp = dataSnapshot.getValue(User.class);
                                 friends.add(temp);
                                 adapter.notifyDataSetChanged();
@@ -94,6 +97,7 @@ public class FriendsFragment extends Fragment implements AdapterView.OnItemClick
                              Bundle savedInstanceState) {
         View temp = inflater.inflate(R.layout.fragment_friends, container, false);
         listView = temp.findViewById(R.id.listFriends);
+        layoutError = temp.findViewById(R.id.noData);
         initializeComponents();
         return temp;
     }

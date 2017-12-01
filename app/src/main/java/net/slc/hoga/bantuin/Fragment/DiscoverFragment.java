@@ -2,18 +2,16 @@ package net.slc.hoga.bantuin.Fragment;
 
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +36,7 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     ListView listView;
     Location loc1, loc2, loc3;
     GPSTracker gps;
+    FrameLayout layoutError;
 
     public DiscoverFragment() {
         // Required empty public constructor
@@ -52,6 +51,7 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_discover, container, false);
+        layoutError = v.findViewById(R.id.noData);
         initializeComponents();
         listView = v.findViewById(R.id.list_view);
         eventDatabase.addListenerForSingleValueEvent(this);
@@ -81,6 +81,9 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
             //loc1 current
             //loc2 new event
             //loc3 temp
+            try{
+                ((ViewGroup) layoutError.getParent()).removeView(layoutError);
+            }catch (Exception e){}
             Event event = postSnapshot.getValue(Event.class);
             loc1.setLatitude(gps.getLatitude());
             loc1.setLongitude(gps.getLongitude());

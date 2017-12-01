@@ -8,21 +8,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import net.slc.hoga.bantuin.Adapter.CategoryAdapter;
 import net.slc.hoga.bantuin.Adapter.SliderAdapter;
@@ -30,7 +25,6 @@ import net.slc.hoga.bantuin.CategoryDetailActivity;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Helper.CustomGridView;
 import net.slc.hoga.bantuin.Model.Category;
-import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
 
 import java.util.ArrayList;
@@ -83,20 +77,23 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
     private void initDots() {
-        dots = new TextView[images.size()];
-        for (int i = 0; i < dots.length; i++) {
-            dots[i] = new TextView(getContext());
-            dots[i].setText(Html.fromHtml("&#8226;"));
-            dots[i].setTextSize(35);
-            dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
-            dotsLayout.addView(dots[i]);
+        try {
+            dots = new TextView[images.size()];
+            for (int i = 0; i < dots.length; i++) {
+                dots[i] = new TextView(getContext());
+                dots[i].setText(Html.fromHtml("&#8226;"));
+                dots[i].setTextSize(35);
+                dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
+                dotsLayout.addView(dots[i]);
+            }
+        } catch (Exception e) {
         }
     }
 
     private void setActiveDots(int currentPage) {
         for (int i = 0; i < dots.length; i++)
             dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
-            dots[currentPage].setTextColor(getResources().getColor(R.color.dot_enabled));
+        dots[currentPage].setTextColor(getResources().getColor(R.color.dot_enabled));
     }
 
     private void initializeComponents() {
