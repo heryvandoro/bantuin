@@ -60,6 +60,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     PopupWindow modal;
     ArrayList<User> volunteers;
     SupportMapFragment mapFragment;
+    ArrayList<String> listFriends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +73,30 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     @Override
     public void initializeComponent() {
         eventKey = getIntent().getStringExtra("key");
-        database = FirebaseDatabase.getInstance().getReference()
-                .child("events");
+        database = FirebaseDatabase.getInstance().getReference();
 
         imageView = findViewById(R.id.imageView);
         category = findViewById(R.id.category);
         user = findViewById(R.id.user);
         location = findViewById(R.id.loctime);
 
-        database.child(eventKey).addValueEventListener(new CustomFirebaseListener() {
+        listFriends = new ArrayList<>();
+
+        database.child("events").child(eventKey).addValueEventListener(new CustomFirebaseListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 event = dataSnapshot.getValue(Event.class);
-                loadContent();
+                database.child("friends").addListenerForSingleValueEvent(new CustomFirebaseListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.hasChild(ActiveUser.getUser().getUid())){
+                            for(DataSnapshot x : dataSnapshot.child(ActiveUser.getUser().getUid()).getChildren()){
+                                listFriends.add(x.getKey());
+                            };
+                        }
+                        loadContent();
+                    }
+                });
             }
         });
 
@@ -125,14 +137,19 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             listViewVolunteer.removeAllViews();
 
             for (int i = 0; i < adapter.getCount(); i++) {
-                if (((User) adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid()))
+                User tempVol = (User) adapter.getItem(i);
+                if (tempVol.getUid().equals(ActiveUser.getUser().getUid())) {
+                    removeJoin();
                     continue;
+                }
                 View temp = adapter.getView(i, null, listViewVolunteer);
-                listViewVolunteer.addView(temp);
                 temp.setTag(((User) adapter.getItem(i)).getUid());
                 temp.setOnClickListener(this);
-                if (((User) adapter.getItem(i)).getUid().equals(ActiveUser.getUser().getUid()))
-                    removeJoin();
+                if(listFriends.indexOf(tempVol.getUid())==-1){
+                    listViewVolunteer.addView(temp);
+                }else{
+                    listViewVolunteer.addView(temp, 0);
+                }
             }
         }
     }
@@ -194,7 +211,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         if (isJoined()) {
             showModal("Event already joined!");
         } else {
-            database.addListenerForSingleValueEvent(new CustomFirebaseListener() {
+            database.child("events").addListenerForSingleValueEvent(new CustomFirebaseListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     boolean isBentrok = false;
@@ -217,7 +234,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                     if (isBentrok) {
                         showModal("Ups, can't join! There are an event on the day.");
                     } else {
-                        database.child(eventKey).child("volunteers").child(ActiveUser.getUser()
+                        database.child("events").child(eventKey).child("volunteers").child(ActiveUser.getUser()
                                 .getUid()).setValue(new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(),
                                 ActiveUser.getUser().getPhotoUrl().toString(), ActiveUser.getUser().getUid()));
                         showModal("Thankyou for join this event :)");
