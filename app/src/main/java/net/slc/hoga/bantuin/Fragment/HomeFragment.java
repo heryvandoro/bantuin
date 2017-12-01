@@ -91,9 +91,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
     private void setActiveDots(int currentPage) {
-        for (int i = 0; i < dots.length; i++)
-            dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
-        dots[currentPage].setTextColor(getResources().getColor(R.color.dot_enabled));
+        try{
+            for (int i = 0; i < dots.length; i++)
+                dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
+            dots[currentPage].setTextColor(getResources().getColor(R.color.dot_enabled));
+        }catch (Exception e){}
     }
 
     private void initializeComponents() {
@@ -150,7 +152,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
                 handler.post(update);
             }
         }, 50, 3000);
-
     }
 
     @Override
