@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import net.slc.hoga.bantuin.Helper.ImageRound;
 import net.slc.hoga.bantuin.Model.User;
 import net.slc.hoga.bantuin.R;
 
@@ -45,6 +46,7 @@ public class UserAdapter extends BaseAdapter {
         ((TextView) v.findViewById(R.id.userName)).setText(listUser.get(i).getName());
         Picasso.with(context)
                 .load(listUser.get(i).getPhoto())
+                .transform(ImageRound.get(context, true))
                 .into((ImageView) v.findViewById(R.id.userPhoto));
         return v;
     }

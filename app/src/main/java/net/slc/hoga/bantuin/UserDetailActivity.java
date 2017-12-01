@@ -3,13 +3,11 @@ package net.slc.hoga.bantuin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +15,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import net.slc.hoga.bantuin.Adapter.EventSmallAdapter;
 import net.slc.hoga.bantuin.Helper.Config;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
+import net.slc.hoga.bantuin.Helper.ImageRound;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
@@ -42,6 +42,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
     EventSmallAdapter adapter;
     ArrayList<Event> events;
     LinearLayout listEvent;
+    Transformation transformation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,8 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
 
         database = FirebaseDatabase.getInstance().getReference();
 
+        transformation = ImageRound.get(this);
+
         database.child("users").child(UID).addListenerForSingleValueEvent(new CustomFirebaseListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -72,6 +75,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                 userEmail.setText(temp.getEmail());
                 Picasso.with(getApplicationContext())
                         .load(temp.getPhoto())
+                        .transform(transformation)
                         .into(userPhoto);
                 actionBar.setTitle(temp.getName());
             }
