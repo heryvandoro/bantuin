@@ -177,7 +177,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             mapFragment.getMapAsync(this);
 
         if (event.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
-//            removeJoin();
+            removeJoin();
         }
 
         if (event.getVolunteers() != null) {
@@ -189,7 +189,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             for (int i = 0; i < adapter.getCount(); i++) {
                 User tempVol = (User) adapter.getItem(i);
                 if (tempVol.getUid().equals(ActiveUser.getUser().getUid())) {
-//                    removeJoin();
+                    removeJoin();
                     continue;
                 }
                 View temp = adapter.getView(i, null, listViewVolunteer);
@@ -245,8 +245,8 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         View customView = inflater.inflate(R.layout.popup_layout, null);
         modal = new PopupWindow(
                 customView,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         ImageButton closeButton = customView.findViewById(R.id.modalClose);
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -296,7 +296,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                                 .getUid()).setValue(new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(),
                                 ActiveUser.getUser().getPhotoUrl().toString(), ActiveUser.getUser().getUid()));
                         showModal("Thankyou for join this event :)");
-//                        removeJoin();
+                        removeJoin();
                     }
                 }
             });
