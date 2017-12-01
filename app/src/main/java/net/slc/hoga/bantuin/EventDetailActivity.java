@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
@@ -15,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -33,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import net.slc.hoga.bantuin.Adapter.SliderAdapter;
 import net.slc.hoga.bantuin.Adapter.UserAdapter;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Model.ActiveUser;
@@ -40,11 +42,12 @@ import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
-public class EventDetailActivity extends MasterActivity implements OnMapReadyCallback, View.OnClickListener {
+public class EventDetailActivity extends MasterActivity implements OnMapReadyCallback, View.OnClickListener, ViewPager.OnPageChangeListener {
 
-    ImageView imageView;
     TextView category, user, location, modalText;
     Button btnJoin;
 
@@ -62,6 +65,14 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     SupportMapFragment mapFragment;
     ArrayList<String> listFriends;
 
+    ViewPager viewPager;
+    LinearLayout dotsLayout;
+
+    TextView[] dots;
+    SliderAdapter sliderAdapter;
+    Handler handler;
+    Runnable update;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +86,6 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         eventKey = getIntent().getStringExtra("key");
         database = FirebaseDatabase.getInstance().getReference();
 
-        imageView = findViewById(R.id.imageView);
         category = findViewById(R.id.category);
         user = findViewById(R.id.user);
         location = findViewById(R.id.loctime);
@@ -106,6 +116,50 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
 
         listViewVolunteer = findViewById(R.id.listVolunteer);
         initializeModal();
+
+        viewPager = findViewById(R.id.view_pager);
+        dotsLayout = findViewById(R.id.layoutDots);
+
+
+    }
+
+    void initHandler() {
+        handler = new Handler();
+        update = new Runnable() {
+            public void run() {
+                int curr = viewPager.getCurrentItem();
+                if (curr == 2 - 1)
+                    curr = 0;
+                else
+                    curr++;
+                viewPager.setCurrentItem(curr, true);
+            }
+        };
+        new Timer().schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                handler.post(update);
+            }
+        }, 50, 3000);
+
+    }
+
+    private void initDots() {
+        dots = new TextView[event.getPictures().size()];
+        for (int i = 0; i < dots.length; i++) {
+            dots[i] = new TextView(this);
+            dots[i].setText(Html.fromHtml("&#8226;"));
+            dots[i].setTextSize(35);
+            dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
+            dotsLayout.addView(dots[i]);
+        }
+    }
+
+    private void setActiveDots(int currentPage) {
+        for (int i = 0; i < dots.length; i++)
+            dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
+        dots[currentPage].setTextColor(getResources().getColor(R.color.dot_enabled));
     }
 
     private void loadContent() {
@@ -118,9 +172,6 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
 
         category.setText(makeString(event.getCategory().getName(), ""));
 
-        Picasso.with(this)
-                .load(event.getPictures().get(0)).placeholder(getResources().getDrawable(R.drawable.load_event))
-                .into(imageView);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -129,7 +180,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             mapFragment.getMapAsync(this);
 
         if (event.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
-            removeJoin();
+//            removeJoin();
         }
 
         if (event.getVolunteers() != null) {
@@ -140,7 +191,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             for (int i = 0; i < adapter.getCount(); i++) {
                 User tempVol = (User) adapter.getItem(i);
                 if (tempVol.getUid().equals(ActiveUser.getUser().getUid())) {
-                    removeJoin();
+//                    removeJoin();
                     continue;
                 }
                 View temp = adapter.getView(i, null, listViewVolunteer);
@@ -154,6 +205,13 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                 }
             }
         }
+
+        sliderAdapter = new SliderAdapter(event.getPictures(), this);
+        viewPager.setAdapter(sliderAdapter);
+        viewPager.addOnPageChangeListener(this);
+        initDots();
+        setActiveDots(0);
+        initHandler();
     }
 
     SpannableString makeString(String boldText, String normalText) {
@@ -240,7 +298,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                                 .getUid()).setValue(new User(ActiveUser.getUser().getDisplayName(), ActiveUser.getUser().getEmail(),
                                 ActiveUser.getUser().getPhotoUrl().toString(), ActiveUser.getUser().getUid()));
                         showModal("Thankyou for join this event :)");
-                        removeJoin();
+//                        removeJoin();
                     }
                 }
             });
@@ -269,5 +327,20 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
             params.setMargins(0, 0, 0, 10);
             layout.findViewById(R.id.scrollDetail).setLayoutParams(params);
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        setActiveDots(position);
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }
