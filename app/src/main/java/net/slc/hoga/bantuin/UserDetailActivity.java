@@ -122,36 +122,40 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
         }
     }
 
-    private void viewUpcomingEvent(){
+    private void viewUpcomingEvent() {
         listEvent = findViewById(R.id.listEvent);
         events = new ArrayList<>();
         database.child("events").addListenerForSingleValueEvent(
-            new CustomFirebaseListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        Event event = postSnapshot.getValue(Event.class);
-                        SimpleDateFormat sdf = new SimpleDateFormat(Config.DATE_FORMAT, Locale.US);
-                        Date d1, d2;
-                        try {
-                            d1 = sdf.parse(event.getDate());
-                            d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
-                            if (d1.compareTo(d2) >= 0) {
-                                for (User user: event.getVolunteers().values()) {
-                                    if(user.getUid().equals(UID))
-                                        events.add(event);
+                new CustomFirebaseListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            Event event = postSnapshot.getValue(Event.class);
+                            SimpleDateFormat sdf = new SimpleDateFormat(Config.DATE_FORMAT, Locale.US);
+                            Date d1, d2;
+                            try {
+                                d1 = sdf.parse(event.getDate());
+                                d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
+                                if (d1.compareTo(d2) >= 0) {
+                                    if (event.getVolunteers() != null) {
+                                        for (User user : event.getVolunteers().values()) {
+                                            if (user.getUid().equals(UID))
+                                                events.add(event);
+                                        }
+                                    }
                                 }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
-                        } catch (ParseException e) { e.printStackTrace(); }
+                        }
+                        adapter = new EventSmallAdapter(events, getApplicationContext());
+                        for (int i = 0; i < adapter.getCount(); i++) {
+                            View temp = adapter.getView(i, null, listEvent);
+                            listEvent.addView(temp);
+                            temp.setTag(((Event) adapter.getItem(i)).getKey());
+                            temp.setOnClickListener(UserDetailActivity.this);
+                        }
                     }
-                    adapter = new EventSmallAdapter(events,getApplicationContext());
-                    for (int i = 0; i<adapter.getCount();i++){
-                        View temp = adapter.getView(i, null, listEvent);
-                        listEvent.addView(temp);
-                        temp.setTag(((Event) adapter.getItem(i)).getKey());
-                        temp.setOnClickListener(UserDetailActivity.this);
-                    }
-                }
-        });
+                });
     }
 }
