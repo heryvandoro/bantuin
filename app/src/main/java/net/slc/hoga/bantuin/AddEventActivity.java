@@ -37,6 +37,9 @@ import net.slc.hoga.bantuin.Helper.FilePath;
 import net.slc.hoga.bantuin.Helper.ImageService;
 import net.slc.hoga.bantuin.Model.Category;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,6 +66,7 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
     Button btnAdd;
 
     ImageService service;
+    List<String> pictures;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +74,6 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
         setContentView(R.layout.activity_add_event);
 
         initializeComponent();
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-
-        service = new Retrofit.Builder().baseUrl(Config.BASE_URL_PICTURE)
-                .client(client).build().create(ImageService.class);
     }
 
     public void initializeComponent() {
@@ -110,6 +107,15 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
 
         btnAdd = findViewById(R.id.btnAddEvent);
         btnAdd.setOnClickListener(this);
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+        service = new Retrofit.Builder().baseUrl(Config.BASE_URL_PICTURE)
+                .client(client).build().create(ImageService.class);
+
+        pictures = new ArrayList<>();
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -163,17 +169,6 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
         }
     }
 
-    public String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        if (cursor == null) return null;
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String s = cursor.getString(column_index);
-        cursor.close();
-        return s;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -195,7 +190,20 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
                 req.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Log.w("result MK", response.body().toString());
+                        try {
+                            String res = response.body().string();
+                            if (!res.contains("AMAN")) {
+                                Toast.makeText(AddEventActivity.this, res, Toast.LENGTH_SHORT).show();
+                            } else {
+                                res = res.substring(5, res.length() - 2);
+                                String[] temp = res.split("#");
+                                for (String x : temp) {
+                                    pictures.add(x);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
