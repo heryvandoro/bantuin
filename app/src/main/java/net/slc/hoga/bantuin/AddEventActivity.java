@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -62,6 +63,7 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
     PlaceAutocompleteFragment autocompleteFragment;
     Button btnAdd;
     Place place;
+    TextInputLayout layoutTitle, layoutDesc, layoutDate, layoutTime;
 
     ImageService service;
     List<String> pictures;
@@ -120,6 +122,11 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
                 .client(client).build().create(ImageService.class);
 
         pictures = new ArrayList<>();
+
+        layoutTitle = findViewById(R.id.layoutTitle);
+        layoutDesc = findViewById(R.id.layoutDesc);
+        layoutTime = findViewById(R.id.textTimeLayout);
+        layoutDate = findViewById(R.id.textDateLayout);
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -166,11 +173,32 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
             }, hour, minute, true);
             mTimePicker.show();
         } else if (view.getId() == R.id.btnAddEvent) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
-            startActivityForResult(Intent.createChooser(intent, "Bantuin - Event Images"), 1);
+            layoutTitle.setErrorEnabled(false);
+            layoutDesc.setErrorEnabled(false);
+            layoutTime.setErrorEnabled(false);
+            layoutDate.setErrorEnabled(false);
+
+            if (textTitle.getText().toString().isEmpty()) {
+                layoutTitle.setError("Title must be filled");
+                layoutTitle.setErrorEnabled(true);
+            } else if (textDescription.getText().toString().isEmpty()) {
+                layoutDesc.setError("Description must be filled");
+                layoutDesc.setErrorEnabled(true);
+            } else if (textDate.getText().toString().isEmpty()) {
+                layoutDate.setError("Event date must be filled");
+                layoutDate.setErrorEnabled(true);
+            } else if (textTime.getText().toString().isEmpty()) {
+                layoutTime.setError("Event time must be filled");
+                layoutTime.setErrorEnabled(true);
+            } else if (place == null) {
+                Toast.makeText(this, "Event location must be filled", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
+                startActivityForResult(Intent.createChooser(intent, "Bantuin - Event Images"), 1);
+            }
         }
     }
 
