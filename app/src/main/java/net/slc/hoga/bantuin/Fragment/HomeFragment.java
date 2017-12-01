@@ -125,8 +125,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
                     images.add(image);
                     sliderAdapter.notifyDataSetChanged();
                 }
-                Log.i("asdasd","Size: "+images.size());
-
                 viewPager.setAdapter(sliderAdapter);
                 viewPager.addOnPageChangeListener(HomeFragment.this);
                 initDots();
