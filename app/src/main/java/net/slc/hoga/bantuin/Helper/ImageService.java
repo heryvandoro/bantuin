@@ -13,4 +13,8 @@ public interface ImageService {
     @Multipart
     @POST("/kiiriim.php")
     Call<ResponseBody> postImage(@Part List<MultipartBody.Part> image);
+
+    @Multipart
+    @POST("/kiiriim2.php")
+    Call<ResponseBody> updatePhoto(@Part MultipartBody.Part image);
 }

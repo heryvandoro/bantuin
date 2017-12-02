@@ -59,6 +59,7 @@ public class HomeActivity extends MasterActivity implements
 
     @Override
     public void initializeComponent() {
+        findViewById(R.id.fab).setVisibility(View.GONE);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -188,13 +189,16 @@ public class HomeActivity extends MasterActivity implements
 
     private void showSnack(boolean isConnected) {
         if (!isConnected) {
+            findViewById(R.id.fab).setVisibility(View.VISIBLE);
             String message = "Check your internet connection :)";
             snackbar = Snackbar
                     .make(findViewById(R.id.fab), message, Snackbar.LENGTH_INDEFINITE);
+
             snackbar.setAction("Dismiss", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     snackbar.dismiss();
+                    findViewById(R.id.fab).setVisibility(View.GONE);
                 }
             });
             snackbar.setActionTextColor(Color.RED);
