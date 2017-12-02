@@ -186,23 +186,24 @@ public class HomeActivity extends MasterActivity implements
     }
 
     private void showSnack(boolean isConnected) {
+        snackbar = Snackbar
+                .make(findViewById(R.id.drawer), "", Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Dismiss", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                snackbar.dismiss();
+            }
+        });
+        snackbar.setActionTextColor(Color.RED);
+        View sbView = snackbar.getView();
+        TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.WHITE);
+
         if (!isConnected) {
-            String message = "Check your internet connection :)";
-            snackbar = Snackbar
-                    .make(findViewById(R.id.drawer), message, Snackbar.LENGTH_INDEFINITE);
-
-            snackbar.setAction("Dismiss", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    snackbar.dismiss();
-                }
-            });
-
-            snackbar.setActionTextColor(Color.RED);
-            View sbView = snackbar.getView();
-            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(Color.WHITE);
+            snackbar.setText("Check your internet connection :)");
             snackbar.show();
+        }else{
+            snackbar.dismiss();
         }
     }
 
