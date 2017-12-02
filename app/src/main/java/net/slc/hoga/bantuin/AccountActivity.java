@@ -114,7 +114,7 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
                         if (!res.startsWith("AMAN#")) {
                             Toast.makeText(AccountActivity.this, res, Toast.LENGTH_SHORT).show();
                         } else {
-                            final String url = Config.BASE_URL_PICTURE+res.substring(5, res.length());
+                            final String url = Config.BASE_URL_PICTURE+res.substring(5, res.length()-1);
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setPhotoUri(Uri.parse(url))
                                     .build();
