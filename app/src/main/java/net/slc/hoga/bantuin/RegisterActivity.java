@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,10 +30,15 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
 
     private boolean isValid = true;
 
+    LinearLayout linearLayout;
+    ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        spinner = findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
 
         initializeComponent();
     }
@@ -74,6 +81,10 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
         else isValid = true;
 
         if(isValid){
+            spinner.setVisibility(View.VISIBLE);
+            linearLayout = findViewById(R.id.linearLayout);
+            linearLayout.setAlpha((float)0.2);
+
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, this);
         }
@@ -97,14 +108,20 @@ public class RegisterActivity extends MasterActivity implements View.OnClickList
                                 User user = new User(ActiveUser.getUser().getDisplayName(),
                                         ActiveUser.getUser().getEmail(), Config.TEMP_PHOTO, uid);
                                 userDatabase.child(uid).setValue(user);
+                                spinner.setVisibility(View.GONE);
+                                linearLayout.setAlpha((float)1.0);
                                 moveToHome();
                             }
                         }
                     });
         } else {
+            spinner.setVisibility(View.GONE);
+            linearLayout.setAlpha((float)1.0);
             Toast.makeText(RegisterActivity.this, task.getException().getMessage().toString(),
                     Toast.LENGTH_SHORT).show();
         }
+
+
     }
 
     @Override

@@ -1,64 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <LinearLayout
-        style="@style/PaddingLayout"
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            style="@style/PaddingLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/textFullname"
-                style="@style/EditText"
-                android:hint="Fullname" />
-        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+                <EditText
+                    android:id="@+id/textFullname"
+                    style="@style/EditText"
+                    android:hint="Fullname" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/textEmail"
-                style="@style/EditText"
-                android:hint="Email" />
-        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+                <EditText
+                    android:id="@+id/textEmail"
+                    style="@style/EditText"
+                    android:hint="Email" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/textPassword"
-                style="@style/EditText"
-                android:hint="Password"
-                android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+                <EditText
+                    android:id="@+id/textPassword"
+                    style="@style/EditText"
+                    android:hint="Password"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/textRePassword"
-                style="@style/EditText"
-                android:hint="Re-Password"
-                android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
-        <Button
-            android:id="@+id/btnRegister"
-            style="@style/Button"
-            android:layout_marginTop="18dp"
-            android:text="REGISTER" />
-    </LinearLayout>
-</ScrollView>
+                <EditText
+                    android:id="@+id/textRePassword"
+                    style="@style/EditText"
+                    android:hint="Re-Password"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/btnRegister"
+                style="@style/Button"
+                android:layout_marginTop="18dp"
+                android:text="REGISTER" />
+        </LinearLayout>
+    </ScrollView>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal" />
+</FrameLayout>
