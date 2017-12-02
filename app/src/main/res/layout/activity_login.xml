@@ -1,86 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/PaddingLayout"
-    android:layout_width="match_parent"
+<FrameLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryDarkColor"
-    android:gravity="center"
-    android:orientation="vertical">
-
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="12dp"
-        android:src="@drawable/bantuin_white_new" />
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:theme="@style/EditTextLogin">
-
-        <EditText
-            android:id="@+id/textEmail"
-            style="@style/EditTextLogin"
-            android:hint="Email" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:theme="@style/EditTextLogin">
-
-        <EditText
-            android:id="@+id/textPassword"
-            style="@style/EditTextLogin"
-            android:hint="Password"
-            android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
-
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
+        android:id="@+id/linearLayout"
+        style="@style/PaddingLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_height="match_parent"
+        android:background="@color/primaryDarkColor"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnLogin"
-            style="@style/ButtonLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
-            android:background="@color/primaryColor"
-            android:text="LOGIN" />
+            android:layout_marginTop="12dp"
+            android:src="@drawable/bantuin_white_new" />
 
-        <TextView
-            android:id="@+id/btnRegister"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:text="Need an account? Register here"
-            android:textColor="@color/primaryTextColor" />
+            android:layout_marginTop="12dp"
+            android:theme="@style/EditTextLogin">
+
+            <EditText
+                android:id="@+id/textEmail"
+                style="@style/EditTextLogin"
+                android:hint="Email" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:theme="@style/EditTextLogin">
+
+            <EditText
+                android:id="@+id/textPassword"
+                style="@style/EditTextLogin"
+                android:hint="Password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnLogin"
+                style="@style/ButtonLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/primaryColor"
+                android:text="LOGIN" />
+
+            <TextView
+                android:id="@+id/btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="Need an account? Register here"
+                android:textColor="@color/primaryTextColor" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/loginGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Google" />
+
+            <Button
+                android:id="@+id/loginFacebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Facebook" />
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/loginGoogle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Google" />
-
-        <Button
-            android:id="@+id/loginFacebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Facebook" />
-    </LinearLayout>
-</LinearLayout>
+    <ProgressBar
+    android:id="@+id/progressBar"
+    style="?android:attr/progressBarStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical|center_horizontal" />
+</FrameLayout>

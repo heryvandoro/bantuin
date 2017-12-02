@@ -64,9 +64,7 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-        spinner = findViewById(R.id.progressBar);
-        spinner.setVisibility(View.GONE);
-        linearLayout = findViewById(R.id.linearLayout);
+
         initializeComponent();
     }
 
@@ -75,6 +73,10 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("My Account");
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        spinner = findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+        linearLayout = findViewById(R.id.linearLayout);
 
         userPhoto = findViewById(R.id.userPhoto);
         editIcon = findViewById(R.id.editIcon);

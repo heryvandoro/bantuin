@@ -11,6 +11,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +48,7 @@ import net.slc.hoga.bantuin.Model.User;
 
 import java.util.Arrays;
 
-public class LoginActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener, FacebookCallback<LoginResult>{
+public class LoginActivity extends MasterActivity implements View.OnClickListener, OnCompleteListener, FacebookCallback<LoginResult> {
 
     private Button loginGoogle, loginFacebook, btnLogin;
     private EditText txtEmail, txtPassword;
@@ -57,6 +59,9 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     private AuthCredential credential;
     private DatabaseReference userDatabase;
     private User tempUser = null;
+
+    LinearLayout linearLayout;
+    ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +76,17 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     0);
-        }else{
+        } else {
             nextProcess();
         }
         return;
     }
 
-    private void nextProcess(){
+    private void nextProcess() {
         initializeComponent();
         checkAvailbility();
 
-        if(ActiveUser.isLogged()) moveToHome();
+        if (ActiveUser.isLogged()) moveToHome();
     }
 
     @Override
@@ -113,10 +118,14 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
 
     }
 
-    public void initializeComponent(){
+    public void initializeComponent() {
         getSupportActionBar().hide();
         btnRegister = findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(this);
+
+        spinner = findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+        linearLayout = findViewById(R.id.linearLayout);
 
         loginGoogle = findViewById(R.id.loginGoogle);
         loginGoogle.setOnClickListener(this);
@@ -143,49 +152,51 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
         userDatabase = userDatabase.child("users");
     }
 
-    private void checkAvailbility(){
-        switch (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)){
+    private void checkAvailbility() {
+        switch (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this)) {
             case ConnectionResult.SERVICE_MISSING:
-                GoogleApiAvailability.getInstance().getErrorDialog(this, ConnectionResult.SERVICE_MISSING,0).show();
+                GoogleApiAvailability.getInstance().getErrorDialog(this, ConnectionResult.SERVICE_MISSING, 0).show();
                 break;
             case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
-                GoogleApiAvailability.getInstance().getErrorDialog(this,ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED,0).show();
+                GoogleApiAvailability.getInstance().getErrorDialog(this, ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED, 0).show();
                 break;
             case ConnectionResult.SERVICE_DISABLED:
-                GoogleApiAvailability.getInstance().getErrorDialog(this,ConnectionResult.SERVICE_DISABLED,0).show();
+                GoogleApiAvailability.getInstance().getErrorDialog(this, ConnectionResult.SERVICE_DISABLED, 0).show();
                 break;
         }
     }
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.loginGoogle :
+        switch (view.getId()) {
+            case R.id.loginGoogle:
                 signIn(1);
                 break;
-            case R.id.loginFacebook :
+            case R.id.loginFacebook:
                 signIn(2);
                 break;
-            case R.id.btnRegister :
+            case R.id.btnRegister:
                 movetoRegister();
                 break;
-            case R.id.btnLogin :
+            case R.id.btnLogin:
                 signIn(3);
                 break;
         }
     }
 
-    private void signIn(int code){
-        if(code==1){
+    private void signIn(int code) {
+        if (code == 1) {
             Intent signInIntent = googleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, 1);
-        }else if(code==2){
+        } else if (code == 2) {
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
-        }else if(code==3){
+        } else if (code == 3) {
+            linearLayout.setAlpha((float) 0.2);
+            spinner.setVisibility(View.VISIBLE);
             String email = txtEmail.getText().toString();
             String password = txtPassword.getText().toString();
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this,this);
+                    .addOnCompleteListener(this, this);
         }
     }
 
@@ -193,7 +204,9 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 1){
+        if (requestCode == 1) {
+            linearLayout.setAlpha((float) 0.2);
+            spinner.setVisibility(View.VISIBLE);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -204,49 +217,54 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
                 e.printStackTrace();
                 Toast.makeText(this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
-        }else{
+        } else {
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
     @Override
     public void onComplete(@NonNull Task task) {
-        if(task.isSuccessful()){
+        if (task.isSuccessful()) {
             ActiveUser.setUser(FirebaseAuth.getInstance().getCurrentUser());
             checkAccountExistsDB();
-        }else{
+        } else {
+            linearLayout.setAlpha((float) 1.0);
+            spinner.setVisibility(View.GONE);
             Toast.makeText(this, task.getException().getMessage().toString(), Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
+        linearLayout.setAlpha((float) 0.2);
+        spinner.setVisibility(View.VISIBLE);
         credential = FacebookAuthProvider.getCredential(token.getToken());
         FirebaseAuth.getInstance().signInWithCredential(credential)
                 .addOnCompleteListener(this, this);
     }
 
-    private void moveToHome(){
+    private void moveToHome() {
         startActivity(new Intent(this, HomeActivity.class));
         finish();
     }
 
-    private void movetoRegister(){
+    private void movetoRegister() {
         startActivity(new Intent(this, RegisterActivity.class));
     }
 
-    private void checkAccountExistsDB(){
+    private void checkAccountExistsDB() {
         userDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String uid = ActiveUser.getUser().getUid();
-                if(!dataSnapshot.hasChild(uid)){
+                if (!dataSnapshot.hasChild(uid)) {
                     tempUser = new User(ActiveUser.getUser().getDisplayName(),
                             ActiveUser.getUser().getEmail(),
                             ActiveUser.getUser().getPhotoUrl().toString(), uid);
 
                     userDatabase.child(uid).setValue(tempUser);
                 }
+                linearLayout.setAlpha((float) 1.0);
+                spinner.setVisibility(View.GONE);
                 moveToHome();
             }
 
