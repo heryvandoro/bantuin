@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,11 +45,18 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
     LinearLayout listEvent;
     Transformation transformation;
 
+    LinearLayout linearLayout;
+    ProgressBar spinner;
+
+    boolean isEventLoaded = false, isProfileLoaded = false, isFriendLoaded = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
-
+        spinner = findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
+        linearLayout = findViewById(R.id.linearLayout);
+        linearLayout.setAlpha((float)0.2);
         initializeComponent();
     }
 
@@ -78,6 +86,13 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                         .transform(transformation)
                         .into(userPhoto);
                 actionBar.setTitle(temp.getName());
+
+                isProfileLoaded = true;
+                if(isProfileLoaded && isEventLoaded)
+                {
+                    linearLayout.setAlpha((float)1.0);
+                    spinner.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -93,6 +108,13 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                                 break;
                             }
                         }
+                        isFriendLoaded = true;
+                        if(isProfileLoaded && isEventLoaded)
+                        {
+                            linearLayout.setAlpha((float)1.0);
+                            spinner.setVisibility(View.GONE);
+                        }
+
                     }
                 });
 
@@ -158,6 +180,12 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                             listEvent.addView(temp);
                             temp.setTag(((Event) adapter.getItem(i)).getKey());
                             temp.setOnClickListener(UserDetailActivity.this);
+                        }
+                        isEventLoaded = true;
+                        if(isProfileLoaded && isFriendLoaded)
+                        {
+                            linearLayout.setAlpha((float)1.0);
+                            spinner.setVisibility(View.GONE);
                         }
                     }
                 });
