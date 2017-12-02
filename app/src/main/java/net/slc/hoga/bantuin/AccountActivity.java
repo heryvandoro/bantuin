@@ -11,9 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,6 +58,9 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
     LinearLayout linearLayout;
     ProgressBar spinner;
 
+    TextView txtName, txtEmail;
+    LinearLayout logoutBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,15 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
 
         userPhoto = findViewById(R.id.userPhoto);
         editIcon = findViewById(R.id.editIcon);
+
+        txtName = findViewById(R.id.userName);
+        txtName.setText(ActiveUser.getUser().getDisplayName());
+
+        txtEmail = findViewById(R.id.userEmail);
+        txtEmail.setText(ActiveUser.getUser().getEmail());
+
+        logoutBar = findViewById(R.id.logout);
+        logoutBar.setOnClickListener(this);
 
         applyPhoto();
 
@@ -94,6 +108,11 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
             startActivityForResult(Intent.createChooser(intent, "Bantuin - Photo Profile"), 1);
+        } else if (view.getId() == R.id.logout) {
+            ActiveUser.logout();
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+            finishAffinity();
         }
     }
 
@@ -108,7 +127,7 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            linearLayout.setAlpha((float)0.2);
+            linearLayout.setAlpha((float) 0.2);
             spinner.setVisibility(View.VISIBLE);
             File file = new File(FilePath.getPath(this, data.getData()));
             MultipartBody.Part images =
@@ -143,7 +162,7 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
                                         }
                                     });
                         }
-                        linearLayout.setAlpha((float)1.0);
+                        linearLayout.setAlpha((float) 1.0);
                         spinner.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
