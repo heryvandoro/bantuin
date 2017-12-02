@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -69,11 +71,19 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
     List<String> pictures;
     List<Category> allCat;
 
+    LinearLayout linearLayout;
+    ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
-
+        spinner = findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
+        linearLayout = findViewById(R.id.linearLayout);
+        spinner = findViewById(R.id.progressBar);
+        linearLayout.setAlpha((float)0.2);
+        spinner.setVisibility(View.VISIBLE);
         initializeComponent();
     }
 
@@ -148,6 +158,8 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
             adapter.add(category.getName());
             adapter.notifyDataSetChanged();
         }
+        linearLayout.setAlpha((float)1.0);
+        spinner.setVisibility(View.GONE);
     }
 
     @Override
@@ -208,6 +220,8 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //two images
             if (data.getClipData() != null) {
+                linearLayout.setAlpha((float)0.2);
+                spinner.setVisibility(View.VISIBLE);
                 ClipData mClipData = data.getClipData();
 
                 List<MultipartBody.Part> parts = new ArrayList();
@@ -226,6 +240,8 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
                         try {
                             String res = response.body().string();
                             if (!res.contains("AMAN")) {
+                                linearLayout.setAlpha((float)1.0);
+                                spinner.setVisibility(View.GONE);
                                 Toast.makeText(AddEventActivity.this, res, Toast.LENGTH_SHORT).show();
                             } else {
                                 res = res.substring(5, res.length() - 2);
@@ -284,6 +300,8 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
             event.setPictures(pictures);
             db.child(key).setValue(event);
             Toast.makeText(this, "Success add event!", Toast.LENGTH_SHORT).show();
+            linearLayout.setAlpha((float)1.0);
+            spinner.setVisibility(View.GONE);
         } catch (Exception e) {
             Toast.makeText(this, "Something wrong!", Toast.LENGTH_SHORT).show();
         }

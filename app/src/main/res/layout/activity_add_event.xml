@@ -1,77 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/PaddingLayout"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/layoutTitle"
+    <LinearLayout
+        style="@style/PaddingLayout"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/textTitle"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layoutTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/textTitle"
+                style="@style/EditText"
+                android:hint="Title" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/layoutDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/textDescription"
+                style="@style/EditText"
+                android:hint="Description" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textDateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/textDate"
+                style="@style/EditText"
+                android:focusable="false"
+                android:hint="Event Date" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textTimeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/textTime"
+                style="@style/EditText"
+                android:focusable="false"
+                android:hint="Event Date" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/spinnerCategories"
             style="@style/EditText"
-            android:hint="Title" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="12dp" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/layoutDesc"
-        android:layout_width="match_parent"
+        <fragment
+            android:id="@+id/placeFragment"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false" />
+
+        <Button
+            android:id="@+id/btnAddEvent"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Save" />
+
+    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
-
-        <EditText
-            android:id="@+id/textDescription"
-            style="@style/EditText"
-            android:hint="Description" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textDateLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
-
-        <EditText
-            android:id="@+id/textDate"
-            style="@style/EditText"
-            android:focusable="false"
-            android:hint="Event Date" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textTimeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp">
-
-        <EditText
-            android:id="@+id/textTime"
-            style="@style/EditText"
-            android:focusable="false"
-            android:hint="Event Date" />
-    </android.support.design.widget.TextInputLayout>
-
-    <Spinner
-        android:id="@+id/spinnerCategories"
-        style="@style/EditText"
-        android:layout_marginTop="12dp" />
-
-    <fragment
-        android:id="@+id/placeFragment"
-        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="false" />
-
-    <Button
-        android:id="@+id/btnAddEvent"
-        style="@style/Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Save" />
-</LinearLayout>
+        android:layout_gravity="center_vertical|center_horizontal" />
+</FrameLayout>
