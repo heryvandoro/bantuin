@@ -12,7 +12,7 @@ import net.slc.hoga.bantuin.Model.ActiveUser;
 
 public class AccountActivity extends MasterActivity {
 
-    ImageView userPhoto, editPhoto;
+    ImageView userPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,6 @@ public class AccountActivity extends MasterActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         userPhoto = findViewById(R.id.userPhoto);
-        editPhoto = findViewById(R.id.editIcon);
 
         Picasso.with(getApplicationContext())
                 .load(ActiveUser.getUser().getPhotoUrl())
