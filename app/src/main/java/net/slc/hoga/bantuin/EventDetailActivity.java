@@ -125,8 +125,6 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
 
         viewPager = findViewById(R.id.view_pager);
         dotsLayout = findViewById(R.id.layoutDots);
-
-
     }
 
     void initHandler() {

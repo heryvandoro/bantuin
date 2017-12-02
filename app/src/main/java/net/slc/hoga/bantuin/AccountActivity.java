@@ -1,17 +1,12 @@
 package net.slc.hoga.bantuin;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
-import android.preference.PreferenceManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -20,22 +15,24 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import net.slc.hoga.bantuin.Helper.Config;
+import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Helper.FilePath;
 import net.slc.hoga.bantuin.Helper.ImageRound;
 import net.slc.hoga.bantuin.Helper.ImageService;
 import net.slc.hoga.bantuin.Model.ActiveUser;
+import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -60,6 +57,8 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
 
     TextView txtName, txtEmail;
     LinearLayout logoutBar;
+
+    DatabaseReference databaseEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +87,8 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
 
         logoutBar = findViewById(R.id.logout);
         logoutBar.setOnClickListener(this);
+
+        databaseEvent = FirebaseDatabase.getInstance().getReference().child("events");
 
         applyPhoto();
 
@@ -142,6 +143,8 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
                         String res = response.body().string();
                         if (!res.startsWith("AMAN#")) {
                             Toast.makeText(AccountActivity.this, res, Toast.LENGTH_SHORT).show();
+                            linearLayout.setAlpha((float) 1.0);
+                            spinner.setVisibility(View.GONE);
                         } else {
                             final String url = Config.BASE_URL_PICTURE + res.substring(5, res.length());
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -157,13 +160,35 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
                                                 FirebaseDatabase.getInstance().getReference()
                                                         .child("users").child(uid).child("photo").setValue(url);
                                                 applyPhoto();
+                                                linearLayout.setAlpha((float) 1.0);
+                                                spinner.setVisibility(View.GONE);
                                                 Toast.makeText(AccountActivity.this, "Success update photo profile!", Toast.LENGTH_SHORT).show();
+
+                                                databaseEvent.addListenerForSingleValueEvent(new CustomFirebaseListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                                            Event e = postSnapshot.getValue(Event.class);
+                                                            FirebaseUser u = ActiveUser.getUser();
+                                                            User pp = new User(u.getDisplayName(),
+                                                                    u.getEmail(), u.getPhotoUrl()
+                                                                    .toString(), u.getUid());
+                                                            if (e.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
+                                                                postSnapshot.getRef().child(e.getKey()).child("organizer").setValue(pp);
+                                                            }
+                                                            if (e.getVolunteers() == null) continue;
+                                                            for (User x : e.getVolunteers().values()) {
+                                                                if (x.getUid().equals(u.getUid())) {
+                                                                    postSnapshot.getRef().child("volunteers").child(x.getUid()).setValue(pp);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
                                             }
                                         }
                                     });
                         }
-                        linearLayout.setAlpha((float) 1.0);
-                        spinner.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
