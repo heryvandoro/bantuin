@@ -82,7 +82,7 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
         spinner.setVisibility(View.VISIBLE);
         linearLayout = findViewById(R.id.linearLayout);
         spinner = findViewById(R.id.progressBar);
-        linearLayout.setAlpha((float)0.2);
+        linearLayout.setAlpha((float) 0.2);
         initializeComponent();
     }
 
@@ -157,7 +157,7 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
             adapter.add(category.getName());
             adapter.notifyDataSetChanged();
         }
-        linearLayout.setAlpha((float)1.0);
+        linearLayout.setAlpha((float) 1.0);
         spinner.setVisibility(View.GONE);
     }
 
@@ -219,7 +219,7 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             //two images
             if (data.getClipData() != null) {
-                linearLayout.setAlpha((float)0.2);
+                linearLayout.setAlpha((float) 0.2);
                 spinner.setVisibility(View.VISIBLE);
                 ClipData mClipData = data.getClipData();
 
@@ -241,14 +241,14 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
                             if (!res.contains("AMAN")) {
                                 Toast.makeText(AddEventActivity.this, res, Toast.LENGTH_SHORT).show();
                             } else {
-                                res = res.substring(5, res.length() - 1);
+                                res = res.substring(5, res.length());
                                 String[] temp = res.split("#");
                                 for (String x : temp) {
                                     pictures.add(Config.BASE_URL_PICTURE + x);
                                 }
                                 saveEvent();
                             }
-                            linearLayout.setAlpha((float)1.0);
+                            linearLayout.setAlpha((float) 1.0);
                             spinner.setVisibility(View.GONE);
                         } catch (Exception e) {
                             e.printStackTrace();
