@@ -72,9 +72,7 @@ public class HomeActivity extends MasterActivity implements
         ((TextView) navMenu.getHeaderView(0).findViewById(R.id.userName)).setText(ActiveUser.getUser().getDisplayName());
         ((TextView) navMenu.getHeaderView(0).findViewById(R.id.userEmail)).setText(ActiveUser.getUser().getEmail());
         navMenu.getHeaderView(0).setOnClickListener(this);
-        Picasso.with(this)
-                .load(ActiveUser.getUser().getPhotoUrl())
-                .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
+        loadPhoto();
 
         fillMenu();
 
@@ -211,6 +209,13 @@ public class HomeActivity extends MasterActivity implements
     protected void onResume() {
         super.onResume();
         ConnectivityChecker.getInstance().setConnectivityListener(this);
+        loadPhoto();
+    }
+
+    private void loadPhoto(){
+        Picasso.with(this)
+                .load(ActiveUser.getUser().getPhotoUrl())
+                .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
     }
 
     @Override
