@@ -43,15 +43,13 @@
         <activity
             android:name=".RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <data android:scheme="@string/facebook_login_protocol_scheme" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -69,6 +67,8 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>
