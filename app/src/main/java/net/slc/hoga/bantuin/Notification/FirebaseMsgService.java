@@ -19,7 +19,6 @@ import net.slc.hoga.bantuin.R;
 public class FirebaseMsgService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d("from : ", "From: " + remoteMessage.getFrom());
         Log.w("tokenFCM", FirebaseInstanceId.getInstance().getToken());
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
@@ -29,7 +28,6 @@ public class FirebaseMsgService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d("messages body : ", remoteMessage.getNotification().getBody());
         }
-
         sendNotification(remoteMessage.getNotification().getBody());
     }
 
@@ -44,7 +42,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.icon_discover)
-                        .setContentTitle("FCM Message")
+                        .setContentTitle("Bantuin")
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
