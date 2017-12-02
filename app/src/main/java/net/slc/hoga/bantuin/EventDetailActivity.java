@@ -15,9 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -57,6 +59,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     LinearLayout listViewVolunteer;
     UserAdapter adapter;
 
+    ProgressBar spinner;
     PopupWindow modal;
     ArrayList<User> volunteers;
     SupportMapFragment mapFragment;
@@ -74,7 +77,8 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
-
+        spinner = findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
         initializeComponent();
     }
 
@@ -103,6 +107,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                             ;
                         }
                         loadContent();
+                        spinner.setVisibility(View.GONE);
                     }
                 });
             }
@@ -319,9 +324,9 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         ViewGroup layout = (ViewGroup) btnJoin.getParent();
         if (null != layout) {
             layout.removeView(btnJoin);
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
             );
             params.setMargins(0, 0, 0, 10);
             layout.findViewById(R.id.scrollDetail).setLayoutParams(params);
