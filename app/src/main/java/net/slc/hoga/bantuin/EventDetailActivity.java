@@ -56,7 +56,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     String eventKey;
     Event event;
 
-    LinearLayout listViewVolunteer;
+    LinearLayout listViewVolunteer,linearLayout;
     UserAdapter adapter;
 
     ProgressBar spinner;
@@ -79,6 +79,8 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         setContentView(R.layout.activity_event_detail);
         spinner = findViewById(R.id.progressBar);
         spinner.setVisibility(View.VISIBLE);
+        linearLayout = findViewById(R.id.linearLayout);
+        linearLayout.setAlpha((float)0.2);
         initializeComponent();
     }
 
@@ -86,6 +88,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     public void initializeComponent() {
         eventKey = getIntent().getStringExtra("key");
         database = FirebaseDatabase.getInstance().getReference();
+
 
         category = findViewById(R.id.category);
         user = findViewById(R.id.user);
@@ -107,6 +110,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                             ;
                         }
                         loadContent();
+                        linearLayout.setAlpha((float)1.0);
                         spinner.setVisibility(View.GONE);
                     }
                 });
