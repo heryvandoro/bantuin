@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -51,10 +53,16 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
     ImageService service;
     OkHttpClient client;
 
+    LinearLayout linearLayout;
+    ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        spinner = findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+        linearLayout = findViewById(R.id.linearLayout);
         initializeComponent();
     }
 
@@ -100,6 +108,8 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            linearLayout.setAlpha((float)0.2);
+            spinner.setVisibility(View.VISIBLE);
             File file = new File(FilePath.getPath(this, data.getData()));
             MultipartBody.Part images =
                     MultipartBody.Part.createFormData("fileToUpload", file.getName(),
@@ -133,6 +143,8 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
                                         }
                                     });
                         }
+                        linearLayout.setAlpha((float)1.0);
+                        spinner.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
