@@ -281,6 +281,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                             isBentrok = true;
                             break;
                         }
+                        if(temp.getVolunteers()==null) continue;
                         ArrayList<User> vol = new ArrayList<>(temp.getVolunteers().values());
                         for (User x : vol) {
                             if (x.getUid().equals(ActiveUser.getUser().getUid())) {

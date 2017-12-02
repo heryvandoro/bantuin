@@ -86,8 +86,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemClickLis
                 dots[i].setTextColor(getResources().getColor(R.color.dot_disabled));
                 dotsLayout.addView(dots[i]);
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     private void setActiveDots(int currentPage) {

@@ -6,6 +6,7 @@
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#c0c0c0</color>
     <color name="backgroundTextColor">#8d8d8d</color>
+    <color name="GreyText">#efefef</color>
 
     <color name="dot_disabled">#ffffff</color>
     <color name="dot_enabled">#8e0000</color>
