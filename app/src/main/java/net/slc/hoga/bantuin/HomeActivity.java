@@ -30,6 +30,7 @@ import net.slc.hoga.bantuin.Helper.BottomNavigationViewHelper;
 import net.slc.hoga.bantuin.Helper.ConnectivityChecker;
 import net.slc.hoga.bantuin.Helper.ConnectivityReceiver;
 import net.slc.hoga.bantuin.Helper.GPSTracker;
+import net.slc.hoga.bantuin.Helper.ImageRound;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 
 public class HomeActivity extends MasterActivity implements
@@ -200,7 +201,7 @@ public class HomeActivity extends MasterActivity implements
         if (!isConnected) {
             snackbar.setText("Check your internet connection :)");
             snackbar.show();
-        }else{
+        } else {
             snackbar.dismiss();
         }
     }
@@ -212,9 +213,10 @@ public class HomeActivity extends MasterActivity implements
         loadPhoto();
     }
 
-    private void loadPhoto(){
+    private void loadPhoto() {
         Picasso.with(this)
                 .load(ActiveUser.getUser().getPhotoUrl())
+                .transform(ImageRound.get(this, true))
                 .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
     }
 

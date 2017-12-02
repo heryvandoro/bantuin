@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom">
+
     <FrameLayout
 
         android:layout_width="wrap_content"
@@ -93,10 +94,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:scrollbars="none" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
@@ -104,6 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal" />
     </FrameLayout>
+
     <Button
         android:id="@+id/btnJoin"
         android:layout_width="match_parent"

@@ -18,6 +18,7 @@
 
     <ListView
         android:id="@+id/listFriends"
+        android:scrollbars="none"
         style="@style/PaddingLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
