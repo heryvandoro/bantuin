@@ -27,7 +27,7 @@ import net.slc.hoga.bantuin.Helper.Config;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Helper.FilePath;
 import net.slc.hoga.bantuin.Helper.ImageRound;
-import net.slc.hoga.bantuin.Helper.ImageService;
+import net.slc.hoga.bantuin.Services.ImageService;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;

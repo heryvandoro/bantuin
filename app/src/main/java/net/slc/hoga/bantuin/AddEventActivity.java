@@ -34,7 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import net.slc.hoga.bantuin.Helper.Config;
 import net.slc.hoga.bantuin.Helper.DateParser;
 import net.slc.hoga.bantuin.Helper.FilePath;
-import net.slc.hoga.bantuin.Helper.ImageService;
+import net.slc.hoga.bantuin.Services.ImageService;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Category;
 import net.slc.hoga.bantuin.Model.Event;
@@ -241,7 +241,7 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
                             if (!res.contains("AMAN")) {
                                 Toast.makeText(AddEventActivity.this, res, Toast.LENGTH_SHORT).show();
                             } else {
-                                res = res.substring(5, res.length() - 2);
+                                res = res.substring(5, res.length() - 1);
                                 String[] temp = res.split("#");
                                 for (String x : temp) {
                                     pictures.add(Config.BASE_URL_PICTURE + x);

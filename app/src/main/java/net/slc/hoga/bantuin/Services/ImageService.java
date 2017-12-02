@@ -1,4 +1,4 @@
-package net.slc.hoga.bantuin.Helper;
+package net.slc.hoga.bantuin.Services;
 
 import java.util.List;
 

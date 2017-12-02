@@ -32,6 +32,7 @@ import net.slc.hoga.bantuin.Helper.ConnectivityReceiver;
 import net.slc.hoga.bantuin.Helper.GPSTracker;
 import net.slc.hoga.bantuin.Helper.ImageRound;
 import net.slc.hoga.bantuin.Model.ActiveUser;
+import net.slc.hoga.bantuin.Notification.DeviceToken;
 
 public class HomeActivity extends MasterActivity implements
         MenuItem.OnMenuItemClickListener,
@@ -54,8 +55,10 @@ public class HomeActivity extends MasterActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         gps = new GPSTracker(this);
-        initializeComponent();
         checkConnection();
+        initializeComponent();
+
+        DeviceToken.send();
     }
 
     @Override

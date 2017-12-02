@@ -3,12 +3,9 @@ package net.slc.hoga.bantuin.Notification;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-
-import net.slc.hoga.bantuin.LoginActivity;
 
 
 public class FirebaseInsIDService extends FirebaseInstanceIdService{
@@ -22,7 +19,5 @@ public class FirebaseInsIDService extends FirebaseInstanceIdService{
                 Log.w("tokenFCM", token);
             }
         }, 2000);
-
-        //sendRegistrationToServer(refreshedToken);
     }
 }
