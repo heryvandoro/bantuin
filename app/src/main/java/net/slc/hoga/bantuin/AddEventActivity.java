@@ -41,8 +41,11 @@ import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -74,6 +77,8 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
     LinearLayout linearLayout;
     ProgressBar spinner;
 
+    final long today = System.currentTimeMillis() - 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +104,11 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
         spinnerCategories.setAdapter(adapter);
 
         calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.getMinimum(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, calendar.getMinimum(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, calendar.getMinimum(Calendar.SECOND));
+        calendar.set(Calendar.MILLISECOND, calendar.getMinimum(Calendar.MILLISECOND));
+
         textDate = findViewById(R.id.textDate);
         textDate.setOnClickListener(this);
 
@@ -166,12 +176,17 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
 
     }
 
+
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.textDate) {
-            new DatePickerDialog(this, date, calendar
+            DatePickerDialog dpd;
+            dpd = new DatePickerDialog(this, date, calendar
                     .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)).show();
+                    calendar.get(Calendar.DAY_OF_MONTH));
+            dpd.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+            dpd.show();
         } else if (view.getId() == R.id.textTime) {
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
@@ -189,6 +204,13 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
             layoutTime.setErrorEnabled(false);
             layoutDate.setErrorEnabled(false);
 
+            SimpleDateFormat df = new SimpleDateFormat(Config.DATE_FORMAT);
+            Calendar today = Calendar.getInstance();
+            Calendar myDay = Calendar.getInstance();
+            today.setTimeInMillis(System.currentTimeMillis());
+            boolean isValidated = false;
+
+
             if (textTitle.getText().toString().isEmpty()) {
                 layoutTitle.setError("Title must be filled");
                 layoutTitle.setErrorEnabled(true);
@@ -203,7 +225,19 @@ public class AddEventActivity extends MasterActivity implements ValueEventListen
                 layoutTime.setErrorEnabled(true);
             } else if (place == null) {
                 Toast.makeText(this, "Event location must be filled", Toast.LENGTH_SHORT).show();
-            } else {
+            }else{
+                try {
+                    Date date = df.parse(textDate.getText().toString());
+                    myDay.setTime(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (!myDay.before(today))
+                    isValidated = true;
+                else
+                    Toast.makeText(this, "Event Date cant be lower than today", Toast.LENGTH_SHORT).show();
+            }
+            if(isValidated) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setType("image/*");
