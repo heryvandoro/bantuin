@@ -88,7 +88,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                 actionBar.setTitle(temp.getName());
 
                 isProfileLoaded = true;
-                if(isProfileLoaded && isEventLoaded)
+                if(isFriendLoaded)
                 {
                     linearLayout.setAlpha((float)1.0);
                     spinner.setVisibility(View.GONE);
@@ -109,7 +109,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                             }
                         }
                         isFriendLoaded = true;
-                        if(isProfileLoaded && isEventLoaded)
+                        if(isProfileLoaded)
                         {
                             linearLayout.setAlpha((float)1.0);
                             spinner.setVisibility(View.GONE);
@@ -151,6 +151,8 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
     private void viewUpcomingEvent() {
         listEvent = findViewById(R.id.listEvent);
         events = new ArrayList<>();
+        linearLayout.setAlpha((float)0.2);
+        spinner.setVisibility(View.VISIBLE);
         database.child("events").addListenerForSingleValueEvent(
                 new CustomFirebaseListener() {
                     @Override
@@ -181,12 +183,8 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                             temp.setTag(((Event) adapter.getItem(i)).getKey());
                             temp.setOnClickListener(UserDetailActivity.this);
                         }
-                        isEventLoaded = true;
-                        if(isProfileLoaded && isFriendLoaded)
-                        {
-                            linearLayout.setAlpha((float)1.0);
-                            spinner.setVisibility(View.GONE);
-                        }
+                        linearLayout.setAlpha((float)1.0);
+                        spinner.setVisibility(View.GONE);
                     }
                 });
     }
