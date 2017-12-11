@@ -44,10 +44,11 @@ public class UserAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         View v = LayoutInflater.from(context).inflate(R.layout.item_user, null);
         ((TextView) v.findViewById(R.id.userName)).setText(listUser.get(i).getName());
+        ImageView temp = v.findViewById(R.id.userPhoto);
         Picasso.with(context)
                 .load(listUser.get(i).getPhoto())
-                .transform(ImageRound.get(context, true))
-                .into((ImageView) v.findViewById(R.id.userPhoto));
+                .transform(ImageRound.get(context, 60, false))
+                .into(temp);
         return v;
     }
 }

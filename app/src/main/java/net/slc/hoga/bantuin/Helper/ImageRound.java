@@ -10,38 +10,16 @@ import com.squareup.picasso.Transformation;
 import net.slc.hoga.bantuin.R;
 
 public class ImageRound {
-    public static Transformation get(Context ctx) {
-        return new RoundedTransformationBuilder()
+    public static Transformation get(Context ctx, float radius, boolean withBorder) {
+        RoundedTransformationBuilder temp = new RoundedTransformationBuilder()
                 .borderColor(ctx.getResources().getColor(R.color.primaryColor))
-                .borderWidthDp(5).scaleType(ImageView.ScaleType.FIT_XY)
-                .cornerRadiusDp(50)
-                .oval(false)
-                .build();
-    }
-
-    public static Transformation get(Context ctx, int temp) {
-        return new RoundedTransformationBuilder()
-                .borderColor(ctx.getResources().getColor(temp))
-                .borderWidthDp(5).scaleType(ImageView.ScaleType.FIT_XY)
-                .cornerRadiusDp(50)
-                .oval(false)
-                .build();
-    }
-
-    public static Transformation get(Context ctx, int border, int radius) {
-        return new RoundedTransformationBuilder()
-                .borderColor(ctx.getResources().getColor(R.color.primaryColor))
-                .borderWidthDp(border).scaleType(ImageView.ScaleType.FIT_XY)
                 .cornerRadiusDp(radius)
-                .oval(false)
-                .build();
-    }
+                .oval(false);
 
-    public static Transformation get(Context ctx, boolean noBorder) {
-        return new RoundedTransformationBuilder()
-                .borderColor(ctx.getResources().getColor(R.color.primaryColor))
-                .cornerRadiusDp(50).scaleType(ImageView.ScaleType.FIT_XY)
-                .oval(false)
-                .build();
+        if (withBorder) {
+            temp.borderWidthDp((float) 2);
+            temp.borderColor(ctx.getResources().getColor(R.color.primaryDarkColor));
+        }
+        return temp.build();
     }
 }

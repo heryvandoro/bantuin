@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/menuHeader"
+    android:layout_width="match_parent"
     android:layout_height="110dp"
     android:background="@color/primaryColor"
     android:padding="15dp">
@@ -12,7 +12,7 @@
         android:layout_height="80dp"
         android:layout_gravity="bottom"
         android:layout_marginRight="15dp"
-        android:src="@drawable/ic_launcher_background" />
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/userName"

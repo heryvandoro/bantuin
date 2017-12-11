@@ -217,10 +217,11 @@ public class HomeActivity extends MasterActivity implements
     }
 
     private void loadPhoto() {
+        ImageView temp = navMenu.getHeaderView(0).findViewById(R.id.userPhoto);
         Picasso.with(this)
                 .load(ActiveUser.getUser().getPhotoUrl())
-                .transform(ImageRound.get(this, true))
-                .into((ImageView) navMenu.getHeaderView(0).findViewById(R.id.userPhoto));
+                .transform(ImageRound.get(this, 80, false))
+                .into(temp);
     }
 
     @Override

@@ -49,6 +49,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
     ProgressBar spinner;
 
     boolean isEventLoaded = false, isProfileLoaded = false, isFriendLoaded = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +57,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
         spinner = findViewById(R.id.progressBar);
         spinner.setVisibility(View.VISIBLE);
         linearLayout = findViewById(R.id.linearLayout);
-        linearLayout.setAlpha((float)0.2);
+        linearLayout.setAlpha((float) 0.2);
         initializeComponent();
     }
 
@@ -73,7 +74,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
 
         database = FirebaseDatabase.getInstance().getReference();
 
-        transformation = ImageRound.get(this);
+        transformation = ImageRound.get(this, 150, false);
 
         database.child("users").child(UID).addListenerForSingleValueEvent(new CustomFirebaseListener() {
             @Override
@@ -88,9 +89,8 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                 actionBar.setTitle(temp.getName());
 
                 isProfileLoaded = true;
-                if(isFriendLoaded)
-                {
-                    linearLayout.setAlpha((float)1.0);
+                if (isFriendLoaded) {
+                    linearLayout.setAlpha((float) 1.0);
                     spinner.setVisibility(View.GONE);
                 }
             }
@@ -109,9 +109,8 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                             }
                         }
                         isFriendLoaded = true;
-                        if(isProfileLoaded)
-                        {
-                            linearLayout.setAlpha((float)1.0);
+                        if (isProfileLoaded) {
+                            linearLayout.setAlpha((float) 1.0);
                             spinner.setVisibility(View.GONE);
                         }
 
@@ -151,7 +150,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
     private void viewUpcomingEvent() {
         listEvent = findViewById(R.id.listEvent);
         events = new ArrayList<>();
-        linearLayout.setAlpha((float)0.2);
+        linearLayout.setAlpha((float) 0.2);
         spinner.setVisibility(View.VISIBLE);
         database.child("events").addListenerForSingleValueEvent(
                 new CustomFirebaseListener() {
@@ -183,7 +182,7 @@ public class UserDetailActivity extends MasterActivity implements View.OnClickLi
                             temp.setTag(((Event) adapter.getItem(i)).getKey());
                             temp.setOnClickListener(UserDetailActivity.this);
                         }
-                        linearLayout.setAlpha((float)1.0);
+                        linearLayout.setAlpha((float) 1.0);
                         spinner.setVisibility(View.GONE);
                     }
                 });

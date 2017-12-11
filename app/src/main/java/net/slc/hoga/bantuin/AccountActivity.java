@@ -122,7 +122,7 @@ public class AccountActivity extends MasterActivity implements View.OnClickListe
     private void applyPhoto() {
         Picasso.with(getApplicationContext())
                 .load(ActiveUser.getUser().getPhotoUrl())
-                .transform(ImageRound.get(this, true))
+                .transform(ImageRound.get(this, 110, false))
                 .into(userPhoto);
     }
 
