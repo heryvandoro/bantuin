@@ -35,12 +35,17 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import net.slc.hoga.bantuin.Adapter.SliderAdapter;
 import net.slc.hoga.bantuin.Adapter.UserAdapter;
+import net.slc.hoga.bantuin.Helper.Config;
 import net.slc.hoga.bantuin.Helper.CustomFirebaseListener;
 import net.slc.hoga.bantuin.Model.ActiveUser;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.Model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -56,7 +61,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     String eventKey;
     Event event;
 
-    LinearLayout listViewVolunteer,linearLayout;
+    LinearLayout listViewVolunteer, linearLayout;
     UserAdapter adapter;
 
     ProgressBar spinner;
@@ -73,6 +78,9 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     Handler handler;
     Runnable update;
 
+    SimpleDateFormat sdf = new SimpleDateFormat(Config.DATE_FORMAT, Locale.US);
+    Date d1, d2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +88,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         spinner = findViewById(R.id.progressBar);
         spinner.setVisibility(View.VISIBLE);
         linearLayout = findViewById(R.id.linearLayout);
-        linearLayout.setAlpha((float)0.2);
+        linearLayout.setAlpha((float) 0.2);
         initializeComponent();
     }
 
@@ -88,7 +96,6 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
     public void initializeComponent() {
         eventKey = getIntent().getStringExtra("key");
         database = FirebaseDatabase.getInstance().getReference();
-
 
         category = findViewById(R.id.category);
         user = findViewById(R.id.user);
@@ -107,10 +114,9 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                             for (DataSnapshot x : dataSnapshot.child(ActiveUser.getUser().getUid()).getChildren()) {
                                 listFriends.add(x.getKey());
                             }
-                            ;
                         }
                         loadContent();
-                        linearLayout.setAlpha((float)1.0);
+                        linearLayout.setAlpha((float) 1.0);
                         spinner.setVisibility(View.GONE);
                     }
                 });
@@ -172,16 +178,23 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
         actionBar.setTitle(event.getTitle());
 
         location.setText(makeString("", event.getTime() + " at " + event.getLocation()));
-        user.setText(makeString("", event.getOrganizer().getName()));
-
+        user.setText(makeString("", event.getOrganizer().getName() + " - " + event.getDate()));
         category.setText(makeString(event.getCategory().getName(), ""));
-
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
         if (mapFragment != null)
             mapFragment.getMapAsync(this);
+
+        try {
+            d1 = sdf.parse(event.getDate());
+            d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
+            if (d1.compareTo(d2) < 0) {
+                removeJoin();
+            }
+        } catch (Exception e) {
+        }
 
         if (event.getOrganizer().getUid().equals(ActiveUser.getUser().getUid())) {
             removeJoin();
@@ -288,7 +301,7 @@ public class EventDetailActivity extends MasterActivity implements OnMapReadyCal
                             isBentrok = true;
                             break;
                         }
-                        if(temp.getVolunteers()==null) continue;
+                        if (temp.getVolunteers() == null) continue;
                         ArrayList<User> vol = new ArrayList<>(temp.getVolunteers().values());
                         for (User x : vol) {
                             if (x.getUid().equals(ActiveUser.getUser().getUid())) {
