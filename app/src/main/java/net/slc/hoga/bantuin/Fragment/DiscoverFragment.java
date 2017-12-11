@@ -21,11 +21,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import net.slc.hoga.bantuin.Adapter.EventAdapter;
 import net.slc.hoga.bantuin.EventDetailActivity;
+import net.slc.hoga.bantuin.Helper.Config;
 import net.slc.hoga.bantuin.Helper.GPSTracker;
 import net.slc.hoga.bantuin.Model.Event;
 import net.slc.hoga.bantuin.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class DiscoverFragment extends Fragment implements ValueEventListener, AdapterView.OnItemClickListener {
     RecyclerView.LayoutManager layoutManager;
@@ -37,6 +42,8 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
     Location loc1, loc2, loc3;
     GPSTracker gps;
     FrameLayout layoutError;
+    SimpleDateFormat sdf = new SimpleDateFormat(Config.DATE_FORMAT, Locale.US);
+    Date d1, d2;
 
     public DiscoverFragment() {
         // Required empty public constructor
@@ -81,10 +88,19 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
             //loc1 current
             //loc2 new event
             //loc3 temp
-            try{
+            try {
                 ((ViewGroup) layoutError.getParent()).removeView(layoutError);
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
             Event event = postSnapshot.getValue(Event.class);
+            try {
+                d1 = sdf.parse(event.getDate());
+                d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
+                if (d1.compareTo(d2) < 0) {
+                    continue;
+                }
+            } catch (Exception e) {
+            }
             loc1.setLatitude(gps.getLatitude());
             loc1.setLongitude(gps.getLongitude());
 
