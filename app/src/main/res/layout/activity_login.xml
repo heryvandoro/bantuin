@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/PaddingLayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="@color/primaryDarkColor">
+
     <LinearLayout
         android:id="@+id/linearLayout"
-        style="@style/PaddingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primaryDarkColor"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_gravity="center"
-            android:layout_marginTop="12dp"
             android:src="@drawable/bantuin_white_new" />
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:theme="@style/EditTextLogin">
-
-            <EditText
-                android:id="@+id/textEmail"
-                style="@style/EditTextLogin"
-                android:hint="Email" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:theme="@style/EditTextLogin">
-
-            <EditText
-                android:id="@+id/textPassword"
-                style="@style/EditTextLogin"
-                android:hint="Password"
-                android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:orientation="vertical">
+            android:layout_marginTop="10dp"
+            android:background="@color/primaryTextColor"
+            android:orientation="vertical"
+            android:padding="30dp">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/EditTextLogin">
+
+                <EditText
+                    android:id="@+id/textEmail"
+                    style="@style/EditTextLogin"
+                    android:hint="Email" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:theme="@style/EditTextLogin">
+
+                <EditText
+                    android:id="@+id/textPassword"
+                    style="@style/EditTextLogin"
+                    android:hint="Password"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/btnLogin"
@@ -55,43 +57,51 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:background="@color/primaryColor"
                 android:text="LOGIN" />
-
-            <TextView
-                android:id="@+id/btnRegister"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:text="Need an account? Register here"
-                android:textColor="@color/primaryTextColor" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="Need an account? Register here"
+            android:textColor="@color/primaryTextColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/loginGoogle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Google" />
+                android:layout_weight="1"
+                android:background="#d62d20"
+                android:text="Google"
+                android:textColor="@color/primaryTextColor" />
 
             <Button
                 android:id="@+id/loginFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Facebook" />
+                android:layout_weight="1"
+                android:background="#3b5998"
+                android:text="Facebook"
+                android:textColor="@color/primaryTextColor" />
         </LinearLayout>
     </LinearLayout>
+
     <ProgressBar
-    android:id="@+id/progressBar"
-    style="?android:attr/progressBarStyle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical|center_horizontal" />
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal" />
 </FrameLayout>

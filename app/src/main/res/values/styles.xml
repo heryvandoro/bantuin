@@ -35,17 +35,13 @@
     <style name="BantuinThemeLogin">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/primaryTextColor</item>
+        <item name="colorAccent">@color/primaryDarkColor</item>
     </style>
 
     <style name="EditTextLogin" parent="BantuinThemeLogin">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:textColorHint">@color/primaryTextColor</item>
-        <item name="android:colorControlNormal">@color/primaryTextColor</item>
-        <item name="android:colorControlActivated">@color/primaryTextColor</item>
     </style>
 
     <style name="ButtonLogin" parent="android:Widget.Button">
