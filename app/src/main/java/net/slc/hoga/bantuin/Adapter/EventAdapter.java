@@ -2,11 +2,12 @@ package net.slc.hoga.bantuin.Adapter;
 
 import android.content.Context;
 import android.location.Location;
-import android.opengl.Visibility;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,9 +19,8 @@ import net.slc.hoga.bantuin.R;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
-import java.util.Locale;
 
-public class EventAdapter extends BaseAdapter {
+public class EventAdapter extends ArrayAdapter<Event> {
     private Context context;
     private ArrayList<Event> events;
     private boolean showDistance = false;
@@ -28,7 +28,8 @@ public class EventAdapter extends BaseAdapter {
     private DecimalFormatSymbols otherSymbols;
     private DecimalFormat df;
 
-    public EventAdapter(ArrayList<Event> events, Context context) {
+    public EventAdapter(Context context, int res, ArrayList<Event> events) {
+        super(context, res, events);
         this.events = events;
         this.context = context;
     }
@@ -48,7 +49,7 @@ public class EventAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int i) {
+    public Event getItem(int i) {
         return events.get(i);
     }
 
@@ -57,24 +58,28 @@ public class EventAdapter extends BaseAdapter {
         return i;
     }
 
+
+    @NonNull
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        View temp = LayoutInflater.from(context).inflate(R.layout.card_event, null);
-        ((TextView) temp.findViewById(R.id.eventTitle)).setText(events.get(i).getTitle());
-        ((TextView) temp.findViewById(R.id.eventDescription)).setText(events.get(i).getDescription());
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.card_event, parent, false);
+        }
+        ((TextView) convertView.findViewById(R.id.eventTitle)).setText(events.get(position).getTitle());
+        ((TextView) convertView.findViewById(R.id.eventDescription)).setText(events.get(position).getDescription());
         if (showDistance) {
             Location locTemp = new Location("");
-            locTemp.setLatitude(events.get(i).getLat());
-            locTemp.setLongitude(events.get(i).getLng());
+            locTemp.setLatitude(events.get(position).getLat());
+            locTemp.setLongitude(events.get(position).getLng());
 
             float distance = locTemp.distanceTo(loc) / 1000;
-            ((TextView) temp.findViewById(R.id.eventDistance)).setText(df.format(distance) + " KM");
-        }else{
-            temp.findViewById(R.id.eventDistance).setVisibility(View.GONE);
+            ((TextView) convertView.findViewById(R.id.eventDistance)).setText(df.format(distance) + " KM");
+        } else {
+            convertView.findViewById(R.id.eventDistance).setVisibility(View.GONE);
         }
         Picasso.with(context)
-                .load(events.get(i).getPictures().get(0)).placeholder(context.getResources().getDrawable(R.drawable.load_event))
-                .into((ImageView) temp.findViewById(R.id.eventPhoto));
-        return temp;
+                .load(events.get(position).getPictures().get(0)).placeholder(context.getResources().getDrawable(R.drawable.load_event))
+                .into((ImageView) convertView.findViewById(R.id.eventPhoto));
+        return convertView;
     }
 }

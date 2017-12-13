@@ -49,7 +49,7 @@ public class CategoryDetailActivity extends MasterActivity implements ValueEvent
 
         layoutManager = new LinearLayoutManager(this);
         events = new ArrayList<>();
-        adapter = new EventAdapter(events, this);
+        adapter = new EventAdapter(this, R.layout.card_event, events);
         database = FirebaseDatabase.getInstance().getReference();
 
         listView = findViewById(R.id.list_view);

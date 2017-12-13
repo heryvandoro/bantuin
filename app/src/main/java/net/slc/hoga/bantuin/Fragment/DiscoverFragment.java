@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class DiscoverFragment extends Fragment implements ValueEventListener, AdapterView.OnItemClickListener {
+public class DiscoverFragment extends Fragment implements ChildEventListener, AdapterView.OnItemClickListener {
     RecyclerView.LayoutManager layoutManager;
     EventAdapter adapter;
 
@@ -61,7 +62,7 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
         layoutError = v.findViewById(R.id.noData);
         initializeComponents();
         listView = v.findViewById(R.id.list_view);
-        eventDatabase.addListenerForSingleValueEvent(this);
+        eventDatabase.addChildEventListener(this);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
         return v;
@@ -76,61 +77,10 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
 
         layoutManager = new LinearLayoutManager(getContext());
         events = new ArrayList<>();
-        adapter = new EventAdapter(events, getContext());
+        adapter = new EventAdapter(getContext(), R.layout.card_event, events);
         adapter.setCurrentLatLng(gps.getLocation());
         eventDatabase = FirebaseDatabase.getInstance().getReference();
         eventDatabase = eventDatabase.child("events");
-    }
-
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-            //loc1 current
-            //loc2 new event
-            //loc3 temp
-            try {
-                ((ViewGroup) layoutError.getParent()).removeView(layoutError);
-            } catch (Exception e) {
-            }
-            Event event = postSnapshot.getValue(Event.class);
-            try {
-                d1 = sdf.parse(event.getDate());
-                d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
-                if (d1.compareTo(d2) < 0) {
-                    continue;
-                }
-            } catch (Exception e) {
-            }
-            loc1.setLatitude(gps.getLatitude());
-            loc1.setLongitude(gps.getLongitude());
-
-            loc2.setLatitude(event.getLat());
-            loc2.setLongitude(event.getLng());
-            float distance = loc1.distanceTo(loc2);
-            boolean inserted = false;
-            for (int i = 0; i < adapter.getCount(); i++) {
-                Event temp = (Event) adapter.getItem(i);
-                loc3.setLongitude(temp.getLng());
-                loc3.setLatitude(temp.getLat());
-
-                if (loc1.distanceTo(loc3) > distance) {
-                    inserted = true;
-                    events.add(i, event);
-                    adapter.notifyDataSetChanged();
-                    break;
-                }
-            }
-
-            if (!inserted) {
-                events.add(event);
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-
     }
 
     @Override
@@ -138,5 +88,66 @@ public class DiscoverFragment extends Fragment implements ValueEventListener, Ad
         Intent intent = new Intent(getContext(), EventDetailActivity.class);
         intent.putExtra("key", events.get(i).getKey());
         startActivity(intent);
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        try {
+            ((ViewGroup) layoutError.getParent()).removeView(layoutError);
+        } catch (Exception e) {
+        }
+        Event event = dataSnapshot.getValue(Event.class);
+        try {
+            d1 = sdf.parse(event.getDate());
+            d2 = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
+            if (d1.compareTo(d2) < 0) {
+                return;
+            }
+        } catch (Exception e) {
+        }
+        loc1.setLatitude(gps.getLatitude());
+        loc1.setLongitude(gps.getLongitude());
+
+        loc2.setLatitude(event.getLat());
+        loc2.setLongitude(event.getLng());
+        float distance = loc1.distanceTo(loc2);
+        boolean inserted = false;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            Event temp = (Event) adapter.getItem(i);
+            loc3.setLongitude(temp.getLng());
+            loc3.setLatitude(temp.getLat());
+
+            if (loc1.distanceTo(loc3) > distance) {
+                inserted = true;
+                events.add(i, event);
+                adapter.notifyDataSetChanged();
+                break;
+            }
+        }
+
+        if (!inserted) {
+            events.add(event);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+
     }
 }

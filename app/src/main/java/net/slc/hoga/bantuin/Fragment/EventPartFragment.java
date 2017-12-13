@@ -44,9 +44,9 @@ public class EventPartFragment extends Fragment implements AdapterView.OnItemCli
         return v;
     }
 
-    private void initializeComponents(){
+    private void initializeComponents() {
         layoutManager = new LinearLayoutManager(getContext());
-        adapter = new EventAdapter(events,getContext());
+        adapter = new EventAdapter(getContext(), R.layout.card_event, events);
     }
 
     @Override
