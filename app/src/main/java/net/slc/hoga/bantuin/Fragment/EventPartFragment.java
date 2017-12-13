@@ -37,16 +37,12 @@ public class EventPartFragment extends Fragment implements AdapterView.OnItemCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_discover, container, false);
-        initializeComponents();
+        layoutManager = new LinearLayoutManager(getContext());
+        adapter = new EventAdapter(getContext(), R.layout.card_event, events);
         listView = v.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
         return v;
-    }
-
-    private void initializeComponents() {
-        layoutManager = new LinearLayoutManager(getContext());
-        adapter = new EventAdapter(getContext(), R.layout.card_event, events);
     }
 
     @Override

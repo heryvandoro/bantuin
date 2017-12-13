@@ -113,7 +113,7 @@ public class DiscoverFragment extends Fragment implements ChildEventListener, Ad
         float distance = loc1.distanceTo(loc2);
         boolean inserted = false;
         for (int i = 0; i < adapter.getCount(); i++) {
-            Event temp = (Event) adapter.getItem(i);
+            Event temp = adapter.getItem(i);
             loc3.setLongitude(temp.getLng());
             loc3.setLatitude(temp.getLat());
 
