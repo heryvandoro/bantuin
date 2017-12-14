@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="net.slc.hoga.bantuin.Fragment.HomeFragment">
+    tools:context="edu.bluejack17_1.bantuin.Fragment.HomeFragment">
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/item_slider"
@@ -39,7 +39,7 @@
             android:layout_height="match_parent"
             android:scrollbars="none">
 
-            <net.slc.hoga.bantuin.Helper.CustomGridView
+            <edu.bluejack17_1.bantuin.Helper.CustomGridView
                 android:id="@+id/grid_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

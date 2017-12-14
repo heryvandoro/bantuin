@@ -77,7 +77,7 @@
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
                         android:layout_height="300dp"
-                        tools:context="net.slc.hoga.bantuin.MapsActivity" />
+                        tools:context="edu.bluejack17_1.bantuin.MapsActivity" />
 
                     <TextView
                         android:id="@+id/labelVolunteers"
