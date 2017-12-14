@@ -8,28 +8,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:613570470402:android:d76622d6c23072f9",
+        "mobilesdk_app_id": "1:613570470402:android:18c4f1b6167fc00a",
         "android_client_info": {
-          "package_name": "com.bantuin.android"
+          "package_name": "edu.bluejack17_1.bantuin"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "613570470402-96hv0cu4dq1tauai425pipntc06gcaur.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.bantuin.android",
-            "certificate_hash": "7e70d2b5e3de95ea3e066d08fe22920295f1f41d"
-          }
-        },
-        {
-          "client_id": "613570470402-2c2bacpkm226p4uh8i80tda3nemttlk6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.bantuin.android",
-            "certificate_hash": "72aafaa278b00d7e6606dd04fea25511dc068507"
-          }
-        },
         {
           "client_id": "613570470402-54odla8smplmh3vm2v6cvibvo45kja08.apps.googleusercontent.com",
           "client_type": 3
@@ -45,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "613570470402-54odla8smplmh3vm2v6cvibvo45kja08.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
