@@ -58,7 +58,7 @@
                 android:id="@+id/textTime"
                 style="@style/EditText"
                 android:focusable="false"
-                android:hint="Event Date" />
+                android:hint="Event Time" />
         </android.support.design.widget.TextInputLayout>
 
         <Spinner
