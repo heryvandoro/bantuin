@@ -215,6 +215,8 @@ public class LoginActivity extends MasterActivity implements View.OnClickListene
                         .addOnCompleteListener(this, this);
             } catch (ApiException e) {
                 e.printStackTrace();
+                linearLayout.setAlpha((float) 1.0);
+                spinner.setVisibility(View.GONE);
                 Toast.makeText(this, e.getMessage().toString(), Toast.LENGTH_LONG).show();
             }
         } else {

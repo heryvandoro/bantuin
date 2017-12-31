@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +49,7 @@ public class EventFragment extends Fragment implements ChildEventListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_event, container, false);
 
         partMyEvents = new EventPartFragment();
@@ -57,14 +59,14 @@ public class EventFragment extends Fragment implements ChildEventListener {
         database = FirebaseDatabase.getInstance().getReference().child("events");
         database.addChildEventListener(this);
 
-        TabAdapter adapter = new TabAdapter(getActivity().getSupportFragmentManager());
+        TabAdapter adapter = new TabAdapter(this.getChildFragmentManager());
         adapter.addFragment(partMyEvents, "My Events");
         adapter.addFragment(partUpcoming, "Upcoming");
         adapter.addFragment(partHistory, "History");
 
         ViewPager viewPager = view.findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
 
         TabLayout tabLayout = view.findViewById(R.id.tab);
         tabLayout.setupWithViewPager(viewPager);

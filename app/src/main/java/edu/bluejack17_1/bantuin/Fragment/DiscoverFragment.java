@@ -92,10 +92,6 @@ public class DiscoverFragment extends Fragment implements ChildEventListener, Ad
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        try {
-            ((ViewGroup) layoutError.getParent()).removeView(layoutError);
-        } catch (Exception e) {
-        }
         Event event = dataSnapshot.getValue(Event.class);
         try {
             d1 = sdf.parse(event.getDate());
@@ -103,6 +99,10 @@ public class DiscoverFragment extends Fragment implements ChildEventListener, Ad
             if (d1.compareTo(d2) < 0) {
                 return;
             }
+        } catch (Exception e) {
+        }
+        try {
+            ((ViewGroup) layoutError.getParent()).removeView(layoutError);
         } catch (Exception e) {
         }
         loc1.setLatitude(gps.getLatitude());
